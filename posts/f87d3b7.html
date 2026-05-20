@@ -1,0 +1,1088 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/bg/icon.jpg">
+  <link rel="icon" href="/img/bg/icon.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="anyu967">
+  <meta name="keywords" content="web,web前端,js,javascript,Devops,linux">
+  
+    <meta name="description" content="2026-05-20-helm介绍及使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="helm介绍及使用">
+<meta property="og:url" content="https://anyue967.github.io/posts/f87d3b7.html">
+<meta property="og:site_name" content="旅行の梦">
+<meta property="og:description" content="2026-05-20-helm介绍及使用">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://anyue967.github.io/img/bg/008.jpg">
+<meta property="article:published_time" content="2026-05-20T09:57:08.000Z">
+<meta property="article:modified_time" content="2026-05-20T10:11:12.795Z">
+<meta property="article:author" content="anyu967">
+<meta property="article:tag" content="web,web前端,js,javascript,Devops,linux">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://anyue967.github.io/img/bg/008.jpg">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>helm介绍及使用 - 旅行の梦</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/macpanel.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"anyue967.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"><link rel="alternate" href="/atom.xml" title="旅行の梦" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>旅行の梦</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-bookmark"></i>
+                <span>收藏</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/bookmark/" target="_self">
+                    <i class="iconfont icon-map"></i>
+                    <span>导航</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/gallery/" target="_self">
+                    <i class="iconfont icon-image"></i>
+                    <span>图库</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/video/" target="_self">
+                    <i class="iconfont icon-snapchat-fill"></i>
+                    <span>影视</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/bg/003.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="helm介绍及使用"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-05-20 17:57" pubdate>
+          2026年5月20日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          29 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">helm介绍及使用</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>2026-05-20-helm介绍及使用 <span id="more"></span>
+<!-- markdownlint-disable MD041 MD002--></p>
+<h1 id="helm">Helm</h1>
+<h2 id="一helm是什么">一、Helm是什么？</h2>
+<p class="note note-primary">
+<strong>Helm 是一个用于 Kubernetes 应用的包管理器，类似 Linux 的
+apt/yum，它使安装和升级复杂应用变得简单。</strong>
+</p>
+<p class="note note-info">
+<strong>核心概念（Chart / Release / Repository / Values）</strong>
+</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash">没有 Helm：<br>  kubectl apply -f deployment.yaml<br>  kubectl apply -f service.yaml<br>  kubectl apply -f configmap.yaml<br>  kubectl apply -f ingress.yaml<br>  ... 一堆文件分开管理<br><br>有了 Helm：<br>  helm install myapp ./mychart<br>  一条命令部署所有资源，版本化管理，支持回滚<br></code></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>说明</th>
+<th>类比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Chart</strong></td>
+<td>应用的打包格式（一堆模板文件）</td>
+<td>deb/rpm 包</td>
+</tr>
+<tr>
+<td><strong>Release</strong></td>
+<td>Chart 的一次部署实例</td>
+<td>已安装的软件</td>
+</tr>
+<tr>
+<td><strong>Repository</strong></td>
+<td>Chart 仓库</td>
+<td>apt 源/yum 源</td>
+</tr>
+<tr>
+<td><strong>Values</strong></td>
+<td>配置参数文件</td>
+<td>配置文件</td>
+</tr>
+</tbody>
+</table>
+<h2 id="二chart-文件结构-完整目录树">二、Chart 文件结构 —
+完整目录树</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs bash">mychart/                          ← Chart 根目录（即 Chart 名称）<br>│<br>├── Chart.yaml                    ← Chart 元数据（必须）<br>├── values.yaml                   ← 默认配置参数（必须）<br>├── values.schema.json            ← values 的 JSON Schema 校验（可选）<br>│<br>├── charts/                       ← 子 Chart 依赖目录<br>│   ├── redis-17.0.0.tgz          ← 依赖的其他 Chart（打包后）<br>│   └── postgresql/               ← 或者解压的依赖 Chart<br>│<br>├── templates/                    ← 模板文件目录（必须）<br>│   ├── _helpers.tpl              ← 模板辅助函数（下划线开头不渲染）<br>│   ├── NOTES.txt                 ← 安装完成后的提示信息<br>│   ├── deployment.yaml           ← Deployment 模板<br>│   ├── service.yaml              ← Service 模板<br>│   ├── ingress.yaml              ← Ingress 模板<br>│   ├── configmap.yaml            ← ConfigMap 模板<br>│   ├── secret.yaml               ← Secret 模板<br>│   ├── serviceaccount.yaml       ← ServiceAccount 模板<br>│   ├── hpa.yaml                  ← HPA 模板<br>│   └── tests/                   ← 测试模板目录<br>│       └── test-connection.yaml  ← 连接测试 Pod<br>│<br>├── crds/                         ← CRD 资源定义目录（安装时最先应用）<br>│   └── myresource.yaml<br>│<br>└── .helmignore                   ← 打包时忽略的文件（类似 .gitignore）<br></code></pre></td></tr></table></figure>
+<h2 id="三核心文件详解">三、核心文件详解</h2>
+<p class="note note-warning">
+<strong>Chart.yaml（Chart 描述文件）</strong>
+</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v2</span>                    <span class="hljs-comment"># Helm 版本，v2 对应 Helm 3</span><br><span class="hljs-attr">name:</span> <span class="hljs-string">mychart</span>                     <span class="hljs-comment"># Chart 名称</span><br><span class="hljs-attr">version:</span> <span class="hljs-number">1.0</span><span class="hljs-number">.0</span>                    <span class="hljs-comment"># Chart 版本（必须是 SemVer）</span><br><span class="hljs-attr">appVersion:</span> <span class="hljs-string">&quot;2.11.0&quot;</span>             <span class="hljs-comment"># 应用版本（Harbor、Nginx 等的版本）</span><br><span class="hljs-attr">description:</span> <span class="hljs-string">A</span> <span class="hljs-string">Helm</span> <span class="hljs-string">chart</span>         <span class="hljs-comment"># 描述</span><br><span class="hljs-attr">type:</span> <span class="hljs-string">application</span>                 <span class="hljs-comment"># 类型：application 或 library</span><br><span class="hljs-attr">keywords:</span>                         <span class="hljs-comment"># 关键词（搜索用）</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-string">harbor</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-string">registry</span><br><span class="hljs-attr">home:</span> <span class="hljs-string">https://github.com/xxx</span>      <span class="hljs-comment"># 项目主页</span><br><span class="hljs-attr">sources:</span>                          <span class="hljs-comment"># 源码地址</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-string">https://github.com/xxx</span><br><span class="hljs-attr">maintainers:</span>                      <span class="hljs-comment"># 维护者</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">xy</span><br>    <span class="hljs-attr">email:</span> <span class="hljs-string">xy@example.com</span><br><span class="hljs-attr">icon:</span> <span class="hljs-string">https://example.com/icon.png</span><br><span class="hljs-attr">dependencies:</span>                     <span class="hljs-comment"># 依赖的子 Chart</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">redis</span><br>    <span class="hljs-attr">version:</span> <span class="hljs-string">&quot;17.x.x&quot;</span><br>    <span class="hljs-attr">repository:</span> <span class="hljs-string">https://charts.bitnami.com/bitnami</span><br>    <span class="hljs-attr">condition:</span> <span class="hljs-string">redis.enabled</span>       <span class="hljs-comment"># 可选：控制是否启用</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">postgresql</span><br>    <span class="hljs-attr">version:</span> <span class="hljs-string">&quot;12.x.x&quot;</span><br>    <span class="hljs-attr">repository:</span> <span class="hljs-string">https://charts.bitnami.com/bitnami</span><br></code></pre></td></tr></table></figure>
+<hr />
+<h3 id="values.yaml默认配置文件">values.yaml（默认配置文件）</h3>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-comment"># 这是用户最常修改的文件</span><br><span class="hljs-comment"># helm install 时可以用 -f 覆盖，或 --set 单独覆盖</span><br><br><span class="hljs-attr">replicaCount:</span> <span class="hljs-number">1</span><br><br><span class="hljs-attr">image:</span><br>  <span class="hljs-attr">repository:</span> <span class="hljs-string">nginx</span><br>  <span class="hljs-attr">pullPolicy:</span> <span class="hljs-string">IfNotPresent</span><br>  <span class="hljs-attr">tag:</span> <span class="hljs-string">&quot;1.25&quot;</span><br><br><span class="hljs-attr">service:</span><br>  <span class="hljs-attr">type:</span> <span class="hljs-string">ClusterIP</span><br>  <span class="hljs-attr">port:</span> <span class="hljs-number">80</span><br><br><span class="hljs-attr">ingress:</span><br>  <span class="hljs-attr">enabled:</span> <span class="hljs-literal">false</span><br>  <span class="hljs-attr">className:</span> <span class="hljs-string">nginx</span><br>  <span class="hljs-attr">hosts:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">host:</span> <span class="hljs-string">myapp.local</span><br>      <span class="hljs-attr">paths:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">path:</span> <span class="hljs-string">/</span><br>          <span class="hljs-attr">pathType:</span> <span class="hljs-string">Prefix</span><br><br><span class="hljs-attr">resources:</span><br>  <span class="hljs-attr">requests:</span><br>    <span class="hljs-attr">memory:</span> <span class="hljs-string">128Mi</span><br>    <span class="hljs-attr">cpu:</span> <span class="hljs-string">100m</span><br>  <span class="hljs-attr">limits:</span><br>    <span class="hljs-attr">memory:</span> <span class="hljs-string">256Mi</span><br>    <span class="hljs-attr">cpu:</span> <span class="hljs-string">500m</span><br><br><span class="hljs-attr">nodeSelector:</span> &#123;&#125;<br><span class="hljs-attr">tolerations:</span> []<br><span class="hljs-attr">affinity:</span> &#123;&#125;<br></code></pre></td></tr></table></figure>
+<hr />
+<h3
+id="templates_helpers.tpl模板辅助函数">templates/_helpers.tpl（模板辅助函数）</h3>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-comment"># 下划线开头的文件不会被直接渲染成 K8s 资源</span><br><span class="hljs-comment"># 用于定义可复用的模板片段</span><br><br>&#123;&#123;<span class="hljs-string">/*</span><br><span class="hljs-string">生成应用名称</span><br><span class="hljs-string">*/</span>&#125;&#125;<br>&#123;&#123;<span class="hljs-bullet">-</span> <span class="hljs-string">define</span> <span class="hljs-string">&quot;mychart.name&quot;</span> <span class="hljs-string">-</span>&#125;&#125;<br>&#123;&#123;<span class="hljs-bullet">-</span> <span class="hljs-string">default</span> <span class="hljs-string">.Chart.Name</span> <span class="hljs-string">.Values.nameOverride</span> <span class="hljs-string">|</span> <span class="hljs-string">trunc</span> <span class="hljs-number">63</span> <span class="hljs-string">|</span> <span class="hljs-string">trimSuffix</span> <span class="hljs-string">&quot;-&quot;</span> &#125;&#125;<br>&#123;&#123;<span class="hljs-bullet">-</span> <span class="hljs-string">end</span> &#125;&#125;<br><br>&#123;&#123;<span class="hljs-string">/*</span><br><span class="hljs-string">生成完整的</span> <span class="hljs-string">release</span> <span class="hljs-string">名称</span><br><span class="hljs-string">*/</span>&#125;&#125;<br>&#123;&#123;<span class="hljs-bullet">-</span> <span class="hljs-string">define</span> <span class="hljs-string">&quot;mychart.fullname&quot;</span> <span class="hljs-string">-</span>&#125;&#125;<br>&#123;&#123;<span class="hljs-bullet">-</span> <span class="hljs-string">printf</span> <span class="hljs-string">&quot;%s-%s&quot;</span> <span class="hljs-string">.Release.Name</span> <span class="hljs-string">.Chart.Name</span> <span class="hljs-string">|</span> <span class="hljs-string">trunc</span> <span class="hljs-number">63</span> <span class="hljs-string">|</span> <span class="hljs-string">trimSuffix</span> <span class="hljs-string">&quot;-&quot;</span> &#125;&#125;<br>&#123;&#123;<span class="hljs-bullet">-</span> <span class="hljs-string">end</span> &#125;&#125;<br><br>&#123;&#123;<span class="hljs-string">/*</span><br><span class="hljs-string">通用标签</span><br><span class="hljs-string">*/</span>&#125;&#125;<br>&#123;&#123;<span class="hljs-bullet">-</span> <span class="hljs-string">define</span> <span class="hljs-string">&quot;mychart.labels&quot;</span> <span class="hljs-string">-</span>&#125;&#125;<br><span class="hljs-attr">helm.sh/chart:</span> &#123;&#123; <span class="hljs-string">.Chart.Name</span> &#125;&#125;<span class="hljs-string">-&#123;&#123;</span> <span class="hljs-string">.Chart.Version</span> <span class="hljs-string">&#125;&#125;</span><br><span class="hljs-attr">app.kubernetes.io/name:</span> &#123;&#123; <span class="hljs-string">include</span> <span class="hljs-string">&quot;mychart.name&quot;</span> <span class="hljs-string">.</span> &#125;&#125;<br><span class="hljs-attr">app.kubernetes.io/instance:</span> &#123;&#123; <span class="hljs-string">.Release.Name</span> &#125;&#125;<br><span class="hljs-attr">app.kubernetes.io/version:</span> &#123;&#123; <span class="hljs-string">.Chart.AppVersion</span> &#125;&#125;<br><span class="hljs-attr">app.kubernetes.io/managed-by:</span> &#123;&#123; <span class="hljs-string">.Release.Service</span> &#125;&#125;<br>&#123;&#123;<span class="hljs-bullet">-</span> <span class="hljs-string">end</span> &#125;&#125;<br></code></pre></td></tr></table></figure>
+<hr />
+<h3
+id="templatesdeployment.yaml模板文件示例">templates/deployment.yaml（模板文件示例）</h3>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">apps/v1</span><br><span class="hljs-attr">kind:</span> <span class="hljs-string">Deployment</span><br><span class="hljs-attr">metadata:</span><br>  <span class="hljs-attr">name:</span> &#123;&#123; <span class="hljs-string">include</span> <span class="hljs-string">&quot;mychart.fullname&quot;</span> <span class="hljs-string">.</span> &#125;&#125;<br>  <span class="hljs-attr">labels:</span><br>    &#123;&#123;<span class="hljs-bullet">-</span> <span class="hljs-string">include</span> <span class="hljs-string">&quot;mychart.labels&quot;</span> <span class="hljs-string">.</span> <span class="hljs-string">|</span> <span class="hljs-string">nindent</span> <span class="hljs-number">4</span> &#125;&#125;<br><span class="hljs-attr">spec:</span><br>  <span class="hljs-attr">replicas:</span> &#123;&#123; <span class="hljs-string">.Values.replicaCount</span> &#125;&#125;<br>  <span class="hljs-attr">selector:</span><br>    <span class="hljs-attr">matchLabels:</span><br>      <span class="hljs-attr">app.kubernetes.io/name:</span> &#123;&#123; <span class="hljs-string">include</span> <span class="hljs-string">&quot;mychart.name&quot;</span> <span class="hljs-string">.</span> &#125;&#125;<br>  <span class="hljs-attr">template:</span><br>    <span class="hljs-attr">metadata:</span><br>      <span class="hljs-attr">labels:</span><br>        <span class="hljs-attr">app.kubernetes.io/name:</span> &#123;&#123; <span class="hljs-string">include</span> <span class="hljs-string">&quot;mychart.name&quot;</span> <span class="hljs-string">.</span> &#125;&#125;<br>    <span class="hljs-attr">spec:</span><br>      <span class="hljs-attr">containers:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> &#123;&#123; <span class="hljs-string">.Chart.Name</span> &#125;&#125;<br>        <span class="hljs-attr">image:</span> <span class="hljs-string">&quot;<span class="hljs-template-variable">&#123;&#123; .Values.image.repository &#125;&#125;</span>:<span class="hljs-template-variable">&#123;&#123; .Values.image.tag &#125;&#125;</span>&quot;</span><br>        <span class="hljs-attr">imagePullPolicy:</span> &#123;&#123; <span class="hljs-string">.Values.image.pullPolicy</span> &#125;&#125;<br>        <span class="hljs-attr">ports:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">containerPort:</span> <span class="hljs-number">80</span><br>        <span class="hljs-attr">resources:</span><br>          &#123;&#123;<span class="hljs-bullet">-</span> <span class="hljs-string">toYaml</span> <span class="hljs-string">.Values.resources</span> <span class="hljs-string">|</span> <span class="hljs-string">nindent</span> <span class="hljs-number">10</span> &#125;&#125;<br>      &#123;&#123;<span class="hljs-bullet">-</span> <span class="hljs-string">with</span> <span class="hljs-string">.Values.nodeSelector</span> &#125;&#125;<br>      <span class="hljs-attr">nodeSelector:</span><br>        &#123;&#123;<span class="hljs-bullet">-</span> <span class="hljs-string">toYaml</span> <span class="hljs-string">.</span> <span class="hljs-string">|</span> <span class="hljs-string">nindent</span> <span class="hljs-number">8</span> &#125;&#125;<br>      &#123;&#123;<span class="hljs-bullet">-</span> <span class="hljs-string">end</span> &#125;&#125;<br></code></pre></td></tr></table></figure>
+<hr />
+<h3 id="notes.txt安装提示">NOTES.txt（安装提示）</h3>
+<figure class="highlight handlebars"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs handlebars"><span class="language-xml">安装完成后显示给用户的提示信息，支持模板语法</span><br><span class="language-xml"></span><br><span class="language-xml">1. 获取应用 URL：</span><br><span class="language-xml"></span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">-</span> if .Values.ingress.enabled &#125;&#125;</span><span class="language-xml"></span><br><span class="language-xml">  http://</span><span class="hljs-template-variable">&#123;&#123; (<span class="hljs-name">index</span> .Values.ingress.hosts <span class="hljs-number">0</span>).host &#125;&#125;</span><span class="language-xml"></span><br><span class="language-xml"></span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">-</span> else &#125;&#125;</span><span class="language-xml"></span><br><span class="language-xml">  export POD_NAME=$(kubectl get pods -l &quot;app=</span><span class="hljs-template-variable">&#123;&#123; <span class="hljs-name">include</span> <span class="hljs-string">&quot;mychart.name&quot;</span> . &#125;&#125;</span><span class="language-xml">&quot; -o jsonpath=&quot;&#123;.items[0].metadata.name&#125;&quot;)</span><br><span class="language-xml">  kubectl port-forward $POD_NAME 8080:80</span><br><span class="language-xml"></span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">-</span> end &#125;&#125;</span><span class="language-xml"></span><br><span class="language-xml"></span><br><span class="language-xml">2. 管理员密码：</span><br><span class="language-xml">  kubectl get secret </span><span class="hljs-template-variable">&#123;&#123; <span class="hljs-name">include</span> <span class="hljs-string">&quot;mychart.fullname&quot;</span> . &#125;&#125;</span><span class="language-xml"> -o jsonpath=&quot;&#123;.data.password&#125;&quot; | base64 -d</span><br></code></pre></td></tr></table></figure>
+<hr />
+<h3 id="helmignore打包忽略">.helmignore（打包忽略）</h3>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli"><span class="hljs-comment"># 打包 Chart 时忽略这些文件</span><br><br><span class="hljs-comment"># Git 相关</span><br><span class="hljs-string">.git/</span><br><span class="hljs-string">.gitignore</span><br><br><span class="hljs-comment"># 文档</span><br>README.md<br>docs/<br><br><span class="hljs-comment"># 开发相关</span><br>*<span class="hljs-string">.tmp</span><br>*<span class="hljs-string">.bak</span><br><span class="hljs-string">.DS_Store</span><br><br><span class="hljs-comment"># CI 相关</span><br><span class="hljs-string">.github/</span><br><span class="hljs-string">.gitlab-ci.yml</span><br></code></pre></td></tr></table></figure>
+<hr />
+<h3 id="values.schema.json参数校验">values.schema.json（参数校验）</h3>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;$schema&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;http://json-schema.org/draft-07/schema&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;properties&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;replicaCount&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;integer&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;minimum&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;description&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;副本数量&quot;</span><br>    <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;image&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;object&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;properties&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;repository&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>          <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;string&quot;</span><br>        <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;tag&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>          <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;string&quot;</span><br>        <span class="hljs-punctuation">&#125;</span><br>      <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;required&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;repository&quot;</span><span class="hljs-punctuation">]</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+<hr />
+<h2 id="四常用命令手册">四、常用命令手册</h2>
+<h3 id="仓库管理">4.1 仓库管理</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 添加仓库</span><br>helm repo add &lt;仓库名&gt; &lt;URL&gt;<br>helm repo add stable https://charts.helm.sh/stable<br>helm repo add harbor https://helm.goharbor.io<br>helm repo add prometheus-community http://mirror.azure.cn/kubernetes/charts-prometheus-community/<br>helm repo add grafana http://mirror.azure.cn/kubernetes/charts-grafana/<br><br><span class="hljs-comment"># 查看仓库列表</span><br>helm repo list<br><br><span class="hljs-comment"># 更新仓库索引</span><br>helm repo update<br>helm repo update prometheus-community   <span class="hljs-comment"># 只更新指定仓库</span><br><br><span class="hljs-comment"># 删除仓库</span><br>helm repo remove &lt;仓库名&gt;<br>helm repo remove harbor<br><br><span class="hljs-comment"># 搜索 Chart</span><br>helm search repo &lt;关键词&gt;<br>helm search repo harbor<br>helm search repo prometheus-community/prometheus<br>helm search repo harbor/harbor --versions    <span class="hljs-comment"># 看所有版本</span><br></code></pre></td></tr></table></figure>
+<hr />
+<h3 id="安装install">4.2 安装（install）</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 基础安装</span><br>helm install &lt;release名&gt; &lt;chart&gt;<br>helm install harbor harbor/harbor<br><br><span class="hljs-comment"># 指定 namespace</span><br>helm install harbor harbor/harbor -n harbor<br>helm install harbor harbor/harbor -n harbor --create-namespace<br><br><span class="hljs-comment"># 使用自定义 values 文件</span><br>helm install harbor harbor/harbor -f values.yaml<br>helm install harbor harbor/harbor -f values.yaml -f override.yaml  <span class="hljs-comment"># 多个文件后面的覆盖前面的</span><br><br><span class="hljs-comment"># 使用 --set 覆盖单个参数</span><br>helm install harbor harbor/harbor --<span class="hljs-built_in">set</span> harborAdminPassword=Harbor12345<br>helm install harbor harbor/harbor --<span class="hljs-built_in">set</span> core.replicas=2,portal.replicas=2<br><br><span class="hljs-comment"># 使用 --set-string 强制字符串类型</span><br>helm install harbor harbor/harbor --set-string image.tag=<span class="hljs-string">&quot;v2.11.0&quot;</span><br><br><span class="hljs-comment"># 指定 Chart 版本</span><br>helm install harbor harbor/harbor --version 1.14.0<br><br><span class="hljs-comment"># 指定超时</span><br>helm install harbor harbor/harbor --<span class="hljs-built_in">timeout</span> 15m<br><br><span class="hljs-comment"># 等待所有资源就绪</span><br>helm install harbor harbor/harbor --<span class="hljs-built_in">wait</span><br><br><span class="hljs-comment"># dry-run（不真正安装，只渲染模板）</span><br>helm install harbor harbor/harbor -f values.yaml --dry-run<br><br><span class="hljs-comment"># dry-run + debug（显示渲染后的完整 YAML）</span><br>helm install harbor harbor/harbor -f values.yaml --dry-run --debug<br><br><span class="hljs-comment"># 从本地 Chart 目录安装</span><br>helm install myapp ./mychart<br><br><span class="hljs-comment"># 从本地 tgz 包安装</span><br>helm install myapp ./mychart-1.0.0.tgz<br><br><span class="hljs-comment"># install 或 upgrade（不存在就装，存在就升级）</span><br>helm upgrade --install harbor harbor/harbor -f values.yaml -n harbor --create-namespace<br></code></pre></td></tr></table></figure>
+<hr />
+<h3 id="查看list-get">4.3 查看（list / get）</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 查看所有 Release</span><br>helm list<br>helm list -A                              <span class="hljs-comment"># 所有 namespace</span><br>helm list -n harbor                       <span class="hljs-comment"># 指定 namespace</span><br>helm list --all                           <span class="hljs-comment"># 包括失败的</span><br>helm list --failed                        <span class="hljs-comment"># 只显示失败的</span><br>helm list --uninstalled                   <span class="hljs-comment"># 显示卸载但保留历史的</span><br><br><span class="hljs-comment"># 查看 Release 状态</span><br>helm status harbor -n harbor<br><br><span class="hljs-comment"># 查看 Release 的 values（安装时传入的）</span><br>helm get values harbor -n harbor          <span class="hljs-comment"># 只看用户自定义的</span><br>helm get values harbor -n harbor --all    <span class="hljs-comment"># 包括默认值</span><br><br><span class="hljs-comment"># 查看 Release 渲染后的 YAML</span><br>helm get manifest harbor -n harbor<br><br><span class="hljs-comment"># 查看 Release 的 hooks</span><br>helm get hooks harbor -n harbor<br><br><span class="hljs-comment"># 查看 Release 的所有信息</span><br>helm get all harbor -n harbor<br><br><span class="hljs-comment"># 查看 Release 历史版本</span><br>helm <span class="hljs-built_in">history</span> harbor -n harbor<br></code></pre></td></tr></table></figure>
+<hr />
+<h3 id="升级upgrade">4.4 升级（upgrade）</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 基础升级</span><br>helm upgrade harbor harbor/harbor -f values.yaml -n harbor<br><br><span class="hljs-comment"># 升级，继承上次的 values</span><br>helm upgrade harbor harbor/harbor --reuse-values -n harbor<br><br><span class="hljs-comment"># 升级，继承上次的 values 并覆盖部分</span><br>helm upgrade harbor harbor/harbor --reuse-values \<br>  --<span class="hljs-built_in">set</span> harborAdminPassword=NewPassword -n harbor<br><br><span class="hljs-comment"># 升级指定版本</span><br>helm upgrade harbor harbor/harbor --version 1.15.0 -n harbor<br><br><span class="hljs-comment"># upgrade 失败自动回滚</span><br>helm upgrade harbor harbor/harbor -f values.yaml \<br>  --atomic \<br>  --<span class="hljs-built_in">timeout</span> 10m \<br>  -n harbor<br><br><span class="hljs-comment"># dry-run 验证升级</span><br>helm upgrade harbor harbor/harbor \<br>  -f values.yaml \<br>  --dry-run \<br>  -n harbor<br><br><span class="hljs-comment"># 强制升级（重建 Pod）</span><br>helm upgrade harbor harbor/harbor \<br>  -f values.yaml \<br>  --force \<br>  -n harbor<br></code></pre></td></tr></table></figure>
+<hr />
+<h3 id="回滚rollback">4.5 回滚（rollback）</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 查看历史</span><br>helm <span class="hljs-built_in">history</span> harbor -n harbor<br><br><span class="hljs-comment"># 输出示例：</span><br><span class="hljs-comment"># REVISION  STATUS     DESCRIPTION</span><br><span class="hljs-comment"># 1         superseded Install complete</span><br><span class="hljs-comment"># 2         superseded Upgrade complete</span><br><span class="hljs-comment"># 3         deployed   Upgrade complete</span><br><br><span class="hljs-comment"># 回滚到上一个版本</span><br>helm rollback harbor -n harbor<br><br><span class="hljs-comment"># 回滚到指定版本</span><br>helm rollback harbor 1 -n harbor<br>helm rollback harbor 2 -n harbor<br><br><span class="hljs-comment"># 回滚并等待完成</span><br>helm rollback harbor 1 --<span class="hljs-built_in">wait</span> -n harbor<br><br><span class="hljs-comment"># 回滚并清理历史</span><br>helm rollback harbor 1 --cleanup-on-fail -n harbor<br></code></pre></td></tr></table></figure>
+<hr />
+<h3 id="卸载uninstall">4.6 卸载（uninstall）</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 卸载</span><br>helm uninstall harbor -n harbor<br><br><span class="hljs-comment"># 卸载但保留历史记录（可以回滚）</span><br>helm uninstall harbor -n harbor --keep-history<br><br><span class="hljs-comment"># 查看保留的历史</span><br>helm list --uninstalled -n harbor<br><br><span class="hljs-comment"># 从保留历史中回滚</span><br>helm rollback harbor 1 -n harbor<br></code></pre></td></tr></table></figure>
+<hr />
+<h3 id="chart-开发">4.7 Chart 开发</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 创建新 Chart</span><br>helm create mychart<br><br><span class="hljs-comment"># 生成的目录结构：</span><br><span class="hljs-comment"># mychart/</span><br><span class="hljs-comment"># ├── Chart.yaml</span><br><span class="hljs-comment"># ├── values.yaml</span><br><span class="hljs-comment"># ├── charts/</span><br><span class="hljs-comment"># └── templates/</span><br><span class="hljs-comment">#     ├── deployment.yaml</span><br><span class="hljs-comment">#     ├── service.yaml</span><br><span class="hljs-comment">#     ├── ingress.yaml</span><br><span class="hljs-comment">#     ├── serviceaccount.yaml</span><br><span class="hljs-comment">#     ├── hpa.yaml</span><br><span class="hljs-comment">#     ├── _helpers.tpl</span><br><span class="hljs-comment">#     ├── NOTES.txt</span><br><span class="hljs-comment">#     └── tests/</span><br><span class="hljs-comment">#         └── test-connection.yaml</span><br><br><span class="hljs-comment"># 校验 Chart 格式</span><br>helm lint mychart<br>helm lint mychart -f values.yaml    <span class="hljs-comment"># 带 values 校验</span><br><br><span class="hljs-comment"># 渲染模板（不安装，只看渲染结果）</span><br>helm template mychart ./mychart<br>helm template mychart ./mychart -f values.yaml<br>helm template mychart ./mychart --<span class="hljs-built_in">set</span> image.tag=v1.0<br>helm template mychart ./mychart &gt; rendered.yaml    <span class="hljs-comment"># 输出到文件</span><br><br><span class="hljs-comment"># 打包 Chart</span><br>helm package mychart<br>helm package mychart --version 1.0.0<br>helm package mychart -d ./output/              <span class="hljs-comment"># 指定输出目录</span><br><br><span class="hljs-comment"># 更新依赖</span><br>helm dependency update mychart<br>helm dependency build mychart<br><br><span class="hljs-comment"># 列出依赖</span><br>helm dependency list mychart<br><br><span class="hljs-comment"># 推送到 OCI 仓库（Harbor）</span><br>helm push mychart-1.0.0.tgz oci://harbor.k8s.<span class="hljs-built_in">local</span>/charts<br></code></pre></td></tr></table></figure>
+<hr />
+<h3 id="查看-chart-信息">4.8 查看 Chart 信息</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 查看 Chart 的 README</span><br>helm show readme harbor/harbor<br><br><span class="hljs-comment"># 查看 Chart 的 values（默认值）</span><br>helm show values harbor/harbor<br><br><span class="hljs-comment"># 查看 Chart 的元数据</span><br>helm show chart harbor/harbor<br><br><span class="hljs-comment"># 查看 Chart 所有信息</span><br>helm show all harbor/harbor<br><br><span class="hljs-comment"># 保存默认 values 到文件</span><br>helm show values harbor/harbor &gt; harbor-default-values.yaml<br><br><span class="hljs-comment"># 查看指定版本的 values</span><br>helm show values harbor/harbor --version 1.14.0<br></code></pre></td></tr></table></figure>
+<hr />
+<h3 id="插件管理">4.9 插件管理</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 安装插件</span><br>helm plugin install https://github.com/chartmuseum/helm-push<br>helm plugin install https://github.com/databus23/helm-diff<br><br><span class="hljs-comment"># 查看已安装插件</span><br>helm plugin list<br><br><span class="hljs-comment"># 更新插件</span><br>helm plugin update &lt;插件名&gt;<br>helm plugin update push<br><br><span class="hljs-comment"># 删除插件</span><br>helm plugin uninstall &lt;插件名&gt;<br>helm plugin uninstall push<br></code></pre></td></tr></table></figure>
+<hr />
+<h3 id="其他常用命令">4.10 其他常用命令</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 查看 Helm 版本</span><br>helm version<br><br><span class="hljs-comment"># 查看环境变量</span><br>helm <span class="hljs-built_in">env</span><br><br><span class="hljs-comment"># 输出示例：</span><br><span class="hljs-comment"># HELM_BIN=&quot;helm&quot;</span><br><span class="hljs-comment"># HELM_CACHE_HOME=&quot;/root/.cache/helm&quot;</span><br><span class="hljs-comment"># HELM_CONFIG_HOME=&quot;/root/.config/helm&quot;</span><br><span class="hljs-comment"># HELM_DATA_HOME=&quot;/root/.local/share/helm&quot;</span><br><span class="hljs-comment"># HELM_REPOSITORY_CACHE=&quot;/root/.cache/helm/repository&quot;</span><br><span class="hljs-comment"># HELM_REPOSITORY_CONFIG=&quot;/root/.config/helm/repositories.yaml&quot;</span><br><br><span class="hljs-comment"># 补全（bash）</span><br>helm completion bash &gt; /etc/bash_completion.d/helm<br><span class="hljs-built_in">source</span> /etc/bash_completion.d/helm<br><br><span class="hljs-comment"># 补全（zsh）</span><br>helm completion zsh &gt; ~/.zsh/completion/_helm<br><br><span class="hljs-comment"># 验证 Chart</span><br>helm verify mychart-1.0.0.tgz<br><br><span class="hljs-comment"># 拉取 Chart 到本地</span><br>helm pull harbor/harbor<br>helm pull harbor/harbor --version 1.14.0<br>helm pull harbor/harbor --untar              <span class="hljs-comment"># 解压</span><br>helm pull harbor/harbor --untar -d ./charts/ <span class="hljs-comment"># 解压到指定目录</span><br></code></pre></td></tr></table></figure>
+<hr />
+<h2 id="五helm-模板语法速查">五、Helm 模板语法速查</h2>
+<h3 id="基本语法">5.1 基本语法</h3>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-comment"># 引用 Values</span><br>&#123;&#123; <span class="hljs-string">.Values.replicaCount</span> &#125;&#125;<br>&#123;&#123; <span class="hljs-string">.Values.image.repository</span> &#125;&#125;<br><br><span class="hljs-comment"># 引用 Chart 信息</span><br>&#123;&#123; <span class="hljs-string">.Chart.Name</span> &#125;&#125;<br>&#123;&#123; <span class="hljs-string">.Chart.Version</span> &#125;&#125;<br>&#123;&#123; <span class="hljs-string">.Chart.AppVersion</span> &#125;&#125;<br><br><span class="hljs-comment"># 引用 Release 信息</span><br>&#123;&#123; <span class="hljs-string">.Release.Name</span> &#125;&#125;<br>&#123;&#123; <span class="hljs-string">.Release.Namespace</span> &#125;&#125;<br>&#123;&#123; <span class="hljs-string">.Release.Service</span> &#125;&#125;<br><br><span class="hljs-comment"># 条件判断</span><br>&#123;&#123;<span class="hljs-bullet">-</span> <span class="hljs-string">if</span> <span class="hljs-string">.Values.ingress.enabled</span> &#125;&#125;<br>  <span class="hljs-comment"># ingress 配置</span><br>&#123;&#123;<span class="hljs-bullet">-</span> <span class="hljs-string">else</span> &#125;&#125;<br>  <span class="hljs-comment"># 其他配置</span><br>&#123;&#123;<span class="hljs-bullet">-</span> <span class="hljs-string">end</span> &#125;&#125;<br><br><span class="hljs-comment"># 循环</span><br>&#123;&#123;<span class="hljs-bullet">-</span> <span class="hljs-string">range</span> <span class="hljs-string">.Values.ingress.hosts</span> &#125;&#125;<br><span class="hljs-bullet">-</span> <span class="hljs-attr">host:</span> &#123;&#123; <span class="hljs-string">.host</span> &#125;&#125;<br>&#123;&#123;<span class="hljs-bullet">-</span> <span class="hljs-string">end</span> &#125;&#125;<br><br><span class="hljs-comment"># with（改变 . 的作用域）</span><br>&#123;&#123;<span class="hljs-bullet">-</span> <span class="hljs-string">with</span> <span class="hljs-string">.Values.nodeSelector</span> &#125;&#125;<br><span class="hljs-attr">nodeSelector:</span><br>  &#123;&#123;<span class="hljs-bullet">-</span> <span class="hljs-string">toYaml</span> <span class="hljs-string">.</span> <span class="hljs-string">|</span> <span class="hljs-string">nindent</span> <span class="hljs-number">8</span> &#125;&#125;<br>&#123;&#123;<span class="hljs-bullet">-</span> <span class="hljs-string">end</span> &#125;&#125;<br><br><span class="hljs-comment"># 默认值</span><br>&#123;&#123; <span class="hljs-string">.Values.image.tag</span> <span class="hljs-string">|</span> <span class="hljs-string">default</span> <span class="hljs-string">&quot;latest&quot;</span> &#125;&#125;<br>&#123;&#123; <span class="hljs-string">default</span> <span class="hljs-string">&quot;nginx&quot;</span> <span class="hljs-string">.Values.image.repository</span> &#125;&#125;<br><br><span class="hljs-comment"># 字符串处理</span><br>&#123;&#123; <span class="hljs-string">.Values.name</span> <span class="hljs-string">|</span> <span class="hljs-string">upper</span> &#125;&#125;          <span class="hljs-comment"># 大写</span><br>&#123;&#123; <span class="hljs-string">.Values.name</span> <span class="hljs-string">|</span> <span class="hljs-string">lower</span> &#125;&#125;          <span class="hljs-comment"># 小写</span><br>&#123;&#123; <span class="hljs-string">.Values.name</span> <span class="hljs-string">|</span> <span class="hljs-string">title</span> &#125;&#125;          <span class="hljs-comment"># 首字母大写</span><br>&#123;&#123; <span class="hljs-string">.Values.name</span> <span class="hljs-string">|</span> <span class="hljs-string">trunc</span> <span class="hljs-number">63</span> &#125;&#125;       <span class="hljs-comment"># 截取</span><br>&#123;&#123; <span class="hljs-string">.Values.name</span> <span class="hljs-string">|</span> <span class="hljs-string">trimSuffix</span> <span class="hljs-string">&quot;-&quot;</span> &#125;&#125; <span class="hljs-comment"># 去掉后缀</span><br>&#123;&#123; <span class="hljs-string">.Values.name</span> <span class="hljs-string">|</span> <span class="hljs-string">quote</span> &#125;&#125;          <span class="hljs-comment"># 加引号</span><br><br><span class="hljs-comment"># YAML 转换</span><br>&#123;&#123;<span class="hljs-bullet">-</span> <span class="hljs-string">toYaml</span> <span class="hljs-string">.Values.resources</span> <span class="hljs-string">|</span> <span class="hljs-string">nindent</span> <span class="hljs-number">10</span> &#125;&#125;<br>&#123;&#123;<span class="hljs-bullet">-</span> <span class="hljs-string">toJson</span> <span class="hljs-string">.Values.config</span> <span class="hljs-string">|</span> <span class="hljs-string">nindent</span> <span class="hljs-number">4</span> &#125;&#125;<br><br><span class="hljs-comment"># 缩进</span><br>&#123;&#123;<span class="hljs-bullet">-</span> <span class="hljs-string">include</span> <span class="hljs-string">&quot;mychart.labels&quot;</span> <span class="hljs-string">.</span> <span class="hljs-string">|</span> <span class="hljs-string">nindent</span> <span class="hljs-number">4</span> &#125;&#125;<br><br><span class="hljs-comment"># 减号（去掉空白）</span><br>&#123;&#123;<span class="hljs-bullet">-</span> <span class="hljs-comment"># 去掉前面的空白</span><br><span class="hljs-string">-</span>&#125;&#125; <span class="hljs-comment"># 去掉后面的空白</span><br></code></pre></td></tr></table></figure>
+<h3 id="常用内置函数">5.2 常用内置函数</h3>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-comment"># 字符串</span><br>&#123;&#123; <span class="hljs-string">&quot;hello&quot;</span> <span class="hljs-string">|</span> <span class="hljs-string">upper</span> &#125;&#125;              <span class="hljs-comment"># HELLO</span><br>&#123;&#123; <span class="hljs-string">&quot;hello world&quot;</span> <span class="hljs-string">|</span> <span class="hljs-string">replace</span> <span class="hljs-string">&quot; &quot;</span> <span class="hljs-string">&quot;-&quot;</span> &#125;&#125;  <span class="hljs-comment"># hello-world</span><br>&#123;&#123; <span class="hljs-string">printf</span> <span class="hljs-string">&quot;%s-%s&quot;</span> <span class="hljs-string">&quot;foo&quot;</span> <span class="hljs-string">&quot;bar&quot;</span> &#125;&#125;   <span class="hljs-comment"># foo-bar</span><br>&#123;&#123; <span class="hljs-string">contains</span> <span class="hljs-string">&quot;cat&quot;</span> <span class="hljs-string">&quot;catch&quot;</span> &#125;&#125;       <span class="hljs-comment"># true</span><br><br><span class="hljs-comment"># 数学</span><br>&#123;&#123; <span class="hljs-string">add</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> &#125;&#125;                      <span class="hljs-comment"># 3</span><br>&#123;&#123; <span class="hljs-string">sub</span> <span class="hljs-number">5</span> <span class="hljs-number">3</span> &#125;&#125;                      <span class="hljs-comment"># 2</span><br>&#123;&#123; <span class="hljs-string">mul</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> &#125;&#125;                      <span class="hljs-comment"># 6</span><br>&#123;&#123; <span class="hljs-string">div</span> <span class="hljs-number">10</span> <span class="hljs-number">2</span> &#125;&#125;                     <span class="hljs-comment"># 5</span><br>&#123;&#123; <span class="hljs-string">mod</span> <span class="hljs-number">10</span> <span class="hljs-number">3</span> &#125;&#125;                     <span class="hljs-comment"># 1</span><br>&#123;&#123; <span class="hljs-string">max</span> <span class="hljs-number">3</span> <span class="hljs-number">5</span> &#125;&#125;                      <span class="hljs-comment"># 5</span><br>&#123;&#123; <span class="hljs-string">min</span> <span class="hljs-number">3</span> <span class="hljs-number">5</span> &#125;&#125;                      <span class="hljs-comment"># 3</span><br><br><span class="hljs-comment"># 列表</span><br>&#123;&#123; <span class="hljs-string">list</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> &#125;&#125;                   <span class="hljs-comment"># [1 2 3]</span><br>&#123;&#123; <span class="hljs-string">has</span> <span class="hljs-string">&quot;cat&quot;</span> <span class="hljs-string">(list</span> <span class="hljs-string">&quot;cat&quot;</span> <span class="hljs-string">&quot;dog&quot;</span><span class="hljs-string">)</span> &#125;&#125; <span class="hljs-comment"># true</span><br>&#123;&#123; <span class="hljs-string">len</span> <span class="hljs-string">(list</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span><span class="hljs-string">)</span> &#125;&#125;             <span class="hljs-comment"># 3</span><br><br><span class="hljs-comment"># 字典</span><br>&#123;&#123; <span class="hljs-string">dict</span> <span class="hljs-string">&quot;key&quot;</span> <span class="hljs-string">&quot;value&quot;</span> &#125;&#125;<br>&#123;&#123; <span class="hljs-string">get</span> <span class="hljs-string">.Values.map</span> <span class="hljs-string">&quot;key&quot;</span> &#125;&#125;<br>&#123;&#123; <span class="hljs-string">hasKey</span> <span class="hljs-string">.Values.map</span> <span class="hljs-string">&quot;key&quot;</span> &#125;&#125;<br><br><span class="hljs-comment"># 类型转换</span><br>&#123;&#123; <span class="hljs-string">&quot;123&quot;</span> <span class="hljs-string">|</span> <span class="hljs-string">int</span> &#125;&#125;                  <span class="hljs-comment"># 123</span><br>&#123;&#123; <span class="hljs-number">123</span> <span class="hljs-string">|</span> <span class="hljs-string">toString</span> &#125;&#125;               <span class="hljs-comment"># &quot;123&quot;</span><br>&#123;&#123; <span class="hljs-string">&quot;true&quot;</span> <span class="hljs-string">|</span> <span class="hljs-string">toBool</span> &#125;&#125;             <span class="hljs-comment"># true</span><br><br><span class="hljs-comment"># 编码</span><br>&#123;&#123; <span class="hljs-string">&quot;hello&quot;</span> <span class="hljs-string">|</span> <span class="hljs-string">b64enc</span> &#125;&#125;             <span class="hljs-comment"># base64 编码</span><br>&#123;&#123; <span class="hljs-string">&quot;aGVsbG8=&quot;</span> <span class="hljs-string">|</span> <span class="hljs-string">b64dec</span> &#125;&#125;         <span class="hljs-comment"># base64 解码</span><br>&#123;&#123; <span class="hljs-string">&quot;hello&quot;</span> <span class="hljs-string">|</span> <span class="hljs-string">sha256sum</span> &#125;&#125;          <span class="hljs-comment"># SHA256</span><br><br><span class="hljs-comment"># 文件</span><br>&#123;&#123; <span class="hljs-string">.Files.Get</span> <span class="hljs-string">&quot;config.yaml&quot;</span> &#125;&#125;     <span class="hljs-comment"># 读取文件内容</span><br></code></pre></td></tr></table></figure>
+<hr />
+<h2 id="六常用操作场景">六、常用操作场景</h2>
+<h3 id="场景-1安装并自定义配置">场景 1：安装并自定义配置</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 查看默认配置</span><br>helm show values prometheus-community/prometheus &gt; prom-values.yaml<br><br><span class="hljs-comment"># 修改 prom-values.yaml 后安装</span><br>helm install prometheus prometheus-community/prometheus \<br>  -f prom-values.yaml \<br>  -n monitoring \<br>  --create-namespace<br><br><span class="hljs-comment"># 验证</span><br>helm list -n monitoring<br>kubectl get pods -n monitoring<br></code></pre></td></tr></table></figure>
+<h3 id="场景-2升级时不改-values">场景 2：升级时不改 values</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 只升级版本，保留原有配置</span><br>helm upgrade harbor harbor/harbor \<br>  --reuse-values \<br>  --version 1.15.0 \<br>  -n harbor<br></code></pre></td></tr></table></figure>
+<h3 id="场景-3查看某次部署用的配置">场景 3：查看某次部署用的配置</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">helm get values harbor -n harbor<br>helm get values harbor -n harbor --all    <span class="hljs-comment"># 包括默认值</span><br></code></pre></td></tr></table></figure>
+<h3 id="场景-4回滚误操作">场景 4：回滚误操作</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 查看历史</span><br>helm <span class="hljs-built_in">history</span> harbor -n harbor<br><br><span class="hljs-comment"># 回滚</span><br>helm rollback harbor 2 -n harbor<br><br><span class="hljs-comment"># 等待回滚完成</span><br>helm rollback harbor 2 --<span class="hljs-built_in">wait</span> -n harbor<br></code></pre></td></tr></table></figure>
+<h3 id="场景-5调试模板">场景 5：调试模板</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 渲染模板，不实际部署</span><br>helm template harbor harbor/harbor -f values.yaml<br><br><span class="hljs-comment"># 渲染并写到文件</span><br>helm template harbor harbor/harbor -f values.yaml &gt; rendered.yaml<br><br><span class="hljs-comment"># 安装时调试</span><br>helm install harbor harbor/harbor \<br>  -f values.yaml \<br>  --dry-run \<br>  --debug 2&gt;&amp;1 | grep -A 10 <span class="hljs-string">&quot;harbor-ingress&quot;</span><br></code></pre></td></tr></table></figure>
+<h3 id="场景-6备份和迁移">场景 6：备份和迁移</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 导出当前 Release 的 values</span><br>helm get values harbor -n harbor &gt; harbor-backup-values.yaml<br><br><span class="hljs-comment"># 导出渲染后的 YAML（用于迁移）</span><br>helm get manifest harbor -n harbor &gt; harbor-manifest-backup.yaml<br><br><span class="hljs-comment"># 在新集群还原</span><br>helm install harbor harbor/harbor \<br>  -f harbor-backup-values.yaml \<br>  -n harbor \<br>  --create-namespace<br></code></pre></td></tr></table></figure>
+<h3 id="场景-7使用-oci-仓库harbor-存-chart">场景 7：使用 OCI
+仓库（Harbor 存 Chart）</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 登录 OCI 仓库</span><br>helm registry login harbor.k8s.local \<br>  --username admin \<br>  --password Harbor12345<br><br><span class="hljs-comment"># 推送 Chart</span><br>helm push mychart-1.0.0.tgz oci://harbor.k8s.<span class="hljs-built_in">local</span>/charts<br><br><span class="hljs-comment"># 从 OCI 仓库安装</span><br>helm install myapp oci://harbor.k8s.<span class="hljs-built_in">local</span>/charts/mychart \<br>  --version 1.0.0<br></code></pre></td></tr></table></figure>
+<hr />
+<h2 id="七helm-目录和配置文件位置">七、Helm 目录和配置文件位置</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash">helm <span class="hljs-built_in">env</span>    <span class="hljs-comment"># 查看所有路径</span><br><br><span class="hljs-comment"># 常用路径</span><br>~/.cache/helm/repository/          <span class="hljs-comment"># Chart 索引和下载的 tgz 缓存</span><br>~/.config/helm/repositories.yaml   <span class="hljs-comment"># 已添加的仓库列表</span><br>~/.local/share/helm/plugins/        <span class="hljs-comment"># 已安装的插件</span><br><br><span class="hljs-comment"># 清理缓存</span><br><span class="hljs-built_in">rm</span> -rf ~/.cache/helm/repository/<br>helm repo update<br></code></pre></td></tr></table></figure>
+<hr />
+<h2 id="八常见问题速查">八、常见问题速查</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 查看 Chart 里有哪些可配置项</span><br>helm show values &lt;chart&gt;<br><br><span class="hljs-comment"># 查看实际部署的资源</span><br>helm get manifest &lt;release&gt; -n &lt;namespace&gt;<br><br><span class="hljs-comment"># 查看部署状态</span><br>helm status &lt;release&gt; -n &lt;namespace&gt;<br><br><span class="hljs-comment"># 查看 Chart 的所有版本</span><br>helm search repo &lt;chart&gt; --versions<br><br><span class="hljs-comment"># 删除失败的 Release</span><br>helm uninstall &lt;release&gt; -n &lt;namespace&gt;<br><br><span class="hljs-comment"># 强制重新安装</span><br>helm uninstall &lt;release&gt; -n &lt;namespace&gt;<br>helm install &lt;release&gt; &lt;chart&gt; -f values.yaml -n &lt;namespace&gt;<br><br><span class="hljs-comment"># 只升级 values，不换版本</span><br>helm upgrade &lt;release&gt; &lt;chart&gt; \<br>  --reuse-values \<br>  --<span class="hljs-built_in">set</span> key=value \<br>  -n &lt;namespace&gt;<br><br><span class="hljs-comment"># 检查 YAML 格式是否正确</span><br>helm lint &lt;chart目录&gt;<br><br><span class="hljs-comment"># 渲染模板检查</span><br>helm template &lt;release&gt; &lt;chart&gt; -f values.yaml | kubectl apply --dry-run=client -f -<br></code></pre></td></tr></table></figure>
+<hr />
+<h2 id="九命令速查表">九、命令速查表</h2>
+<table>
+
+<thead>
+<tr>
+<th>分类</th>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>仓库</strong></td>
+<td><code>helm repo add &lt;名&gt; &lt;URL&gt;</code></td>
+<td>添加仓库</td>
+</tr>
+<tr>
+<td></td>
+<td><code>helm repo list</code></td>
+<td>查看仓库</td>
+</tr>
+<tr>
+<td></td>
+<td><code>helm repo update</code></td>
+<td>更新索引</td>
+</tr>
+<tr>
+<td></td>
+<td><code>helm repo remove &lt;名&gt;</code></td>
+<td>删除仓库</td>
+</tr>
+<tr>
+<td></td>
+<td><code>helm search repo &lt;关键词&gt;</code></td>
+<td>搜索 Chart</td>
+</tr>
+<tr>
+<td><strong>安装</strong></td>
+<td><code>helm install &lt;release&gt; &lt;chart&gt; -f values.yaml -n &lt;ns&gt;</code></td>
+<td>安装</td>
+</tr>
+<tr>
+<td></td>
+<td><code>helm upgrade --install &lt;release&gt; &lt;chart&gt; -f values.yaml</code></td>
+<td>不存在就装</td>
+</tr>
+<tr>
+<td></td>
+<td><code>helm install ... --dry-run</code></td>
+<td>模拟安装</td>
+</tr>
+<tr>
+<td><strong>查看</strong></td>
+<td><code>helm list -A</code></td>
+<td>查看所有 Release</td>
+</tr>
+<tr>
+<td></td>
+<td><code>helm status &lt;release&gt;</code></td>
+<td>查看状态</td>
+</tr>
+<tr>
+<td></td>
+<td><code>helm get values &lt;release&gt;</code></td>
+<td>查看配置</td>
+</tr>
+<tr>
+<td></td>
+<td><code>helm get manifest &lt;release&gt;</code></td>
+<td>查看资源 YAML</td>
+</tr>
+<tr>
+<td></td>
+<td><code>helm history &lt;release&gt;</code></td>
+<td>查看历史</td>
+</tr>
+<tr>
+<td><strong>升级</strong></td>
+<td><code>helm upgrade &lt;release&gt; &lt;chart&gt; -f values.yaml</code></td>
+<td>升级</td>
+</tr>
+<tr>
+<td></td>
+<td><code>helm upgrade ... --reuse-values</code></td>
+<td>保留原配置升级</td>
+</tr>
+<tr>
+<td></td>
+<td><code>helm upgrade ... --atomic</code></td>
+<td>失败自动回滚</td>
+</tr>
+<tr>
+<td><strong>回滚</strong></td>
+<td><code>helm rollback &lt;release&gt; &lt;版本号&gt;</code></td>
+<td>回滚到指定版本</td>
+</tr>
+<tr>
+<td></td>
+<td><code>helm rollback &lt;release&gt;</code></td>
+<td>回滚到上一版本</td>
+</tr>
+<tr>
+<td><strong>卸载</strong></td>
+<td><code>helm uninstall &lt;release&gt; -n &lt;ns&gt;</code></td>
+<td>卸载</td>
+</tr>
+<tr>
+<td></td>
+<td><code>helm uninstall ... --keep-history</code></td>
+<td>卸载保留历史</td>
+</tr>
+<tr>
+<td><strong>开发</strong></td>
+<td><code>helm create &lt;名&gt;</code></td>
+<td>创建 Chart</td>
+</tr>
+<tr>
+<td></td>
+<td><code>helm lint &lt;chart&gt;</code></td>
+<td>校验 Chart</td>
+</tr>
+<tr>
+<td></td>
+<td><code>helm template &lt;release&gt; &lt;chart&gt;</code></td>
+<td>渲染模板</td>
+</tr>
+<tr>
+<td></td>
+<td><code>helm package &lt;chart&gt;</code></td>
+<td>打包 Chart</td>
+</tr>
+<tr>
+<td></td>
+<td><code>helm show values &lt;chart&gt;</code></td>
+<td>查看默认 values</td>
+</tr>
+<tr>
+<td><strong>插件</strong></td>
+<td><code>helm plugin install &lt;URL&gt;</code></td>
+<td>安装插件</td>
+</tr>
+<tr>
+<td></td>
+<td><code>helm plugin list</code></td>
+<td>查看插件</td>
+</tr>
+</tbody>
+</table>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>helm介绍及使用</div>
+      <div>https://anyue967.github.io/posts/f87d3b7.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>anyu967</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年5月20日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/posts/41908a5e.html" title="kubectl命令完整手册">
+                        <span class="hidden-mobile">kubectl命令完整手册</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.utils.listenDOMLoaded(function() {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          mermaid.init();
+        }
+      });
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <a href="https://blog.kevinchu.top/atom.xml" target="_blank" rel="nofollow noopener"><i class="iconfont icon-rss"></i>RSS</a> <div style="font-size: 0.85rem"> <span>本网站由</span> <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="_blank" rel="nofollow noopener" ><img src="/img/bg/upyun.png" srcset="/img/loading.gif" lazyload alt="upyun" width="55px" height="30px" style="fill: currentColor;"></a> <span>提供CDN加速/云存储服务<span> </div> <div style="font-size: 0.85rem"> <span id="timeDate">载入天数...</span> <span id="times">载入时分秒...</span> <script src="/js/duration.js"></script> </div> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      陕ICP备2026004197号-1
+    </a>
+  </span>
+  
+    
+      <span>
+        <a
+          href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=61058102000324"
+          rel="nofollow noopener"
+          class="beian-police"
+          target="_blank"
+        >
+          
+            <span style="visibility: hidden; width: 0">|</span>
+            <img src="/img/police_beian.png" srcset="/img/loading.gif" lazyload alt="police-icon"/>
+          
+          <span>陕公网安备61058102000324号</span>
+        </a>
+      </span>
+    
+  
+</div>
+
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="/js/starts.js"></script>
+<script src="/js/typing-effect.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
