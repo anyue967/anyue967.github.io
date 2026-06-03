@@ -1,5 +1,5 @@
 ---
-title: review
+title: interview
 tags:
   - Devops
   - linux
@@ -384,3 +384,180 @@ done
   * grub> boot
 + 另外故障
   * 单用户模式编辑inittab文件
+
+###  docker 测试
+> 编写 Dockerfile ，构建⼀个Docker镜像（不能包含 MySQL 服务端程序），实现以下功能：
+> 
+> 镜像中包含⼀个 shell 脚本，容器启动后每隔 `30s` 收集 MySQL 数据库当前的连接数，将数据同时输出⾄ /data/log ⽂件（⽇志可以持久化保存）及标准输出中数据库IP、端⼝、⽤户及密码可以在容器启动时通过 -e 指定环境变量来修改要求容器启动后可以使⽤ `docker logs container_name` 和 `docker exec -i -t container_name tail -f /data/log` 两种⽅式查看⽇志信息每次输出的信息格式如下 `[2019-01-01 00:00:00] Number of active DB connections is 10.`
+
+---
+
+> 编写 docker-compose.yml 脚本，使⽤上述Dockerfile中构建的镜像及 MySQL 镜像启动服务
+
+```bash
+# monitor.sh
+
+#!/bin/bash
+# 默认环境变量（容器启动时可通过 -e 覆盖）
+# 脚本里的写法（Dockerfile ENV未设时的兜底）
+DB_HOST=${DB_HOST:-"127.0.0.1"}
+DB_PORT=${DB_PORT:-"3306"}
+DB_USER=${DB_USER:-"root"}
+DB_PASS=${DB_PASS:-"root"}
+
+# 确保日志目录存在
+mkdir -p /data
+touch /data/log
+
+echo "MySQL Monitor starting..."
+echo "Connecting to ${DB_HOST}:${DB_PORT} as ${DB_USER}"
+
+while true; do
+    # 获取当前时间
+    TIMESTAMP=$(date "+%Y-%m-%d %H:%M:%S")
+
+    # 查询当前连接数
+    # SHOW STATUS LIKE 'Threads_connected' 返回当前活跃连接数
+    CONNECTIONS=$(mysql \
+        -h "${DB_HOST}" \
+        -P "${DB_PORT}" \
+        -u "${DB_USER}" \
+        -p "${DB_PASS}" \
+        --connect-timeout=5 \
+        -ss \
+        -e "SHOW STATUS LIKE 'Threads_connected';" 2>/dev/null | awk '{print $2}')
+
+    # 判断是否获取成功
+    if [ -z "${CONNECTIONS}" ]; then
+        MSG="[${TIMESTAMP}] ERROR: Failed to connect to MySQL at ${DB_HOST}:${DB_PORT}"
+    else
+        MSG="[${TIMESTAMP}] Number of active DB connections is ${CONNECTIONS}."
+    fi
+
+    # 同时输出到日志文件和标准输出（tee实现双输出）
+    echo "${MSG}" | tee -a /data/log
+
+    # 等待30秒
+    sleep 30
+done
+```
+---
+
+```yml
+# Dockerfile.yml
+# 使用轻量级alpine镜像，体积小
+FROM alpine:3.18
+ 
+# 安装 mysql-client 和 bash
+# alpine默认用sh，安装bash保证脚本兼容性
+RUN apk add --no-cache \
+    mysql-client \
+    bash
+ 
+# 构建指令 创建日志目录
+RUN mkdir -p /data
+ 
+# 设置默认环境变量（容器启动时可通过 -e 覆盖）
+ENV DB_HOST=127.0.0.1 \
+    DB_PORT=3306 \
+    DB_USER=root \
+    DB_PASS=root
+ 
+# 复制监控脚本到镜像
+COPY monitor.sh /usr/local/bin/monitor.sh
+ 
+# 赋予执行权限
+RUN chmod +x /usr/local/bin/monitor.sh
+ 
+# 声明挂载点（/data目录可映射到宿主机实现持久化）
+VOLUME ["/data"]
+ 
+# 容器启动时执行监控脚本
+CMD ["/usr/local/bin/monitor.sh"]
+```
+
+---
+
+```yml
+# docker-compose.yml
+version: '3.8'
+
+services:
+  # MySQL服务
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_server
+    # 保证容器意外退出时自动重启
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: testdb
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot123"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
+
+  # MySQL连接数监控服务（使用题目1构建的镜像）
+  mysql-monitor:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: mysql-monitor:latest
+    container_name: mysql_monitor
+    restart: unless-stopped
+    environment:
+      # 通过服务名访问MySQL（compose内部DNS自动解析）
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASS: root123
+    volumes:
+      # 将/data目录挂载到宿主机，实现日志持久化
+      - ./logs:/data
+    depends_on:
+      mysql:
+      # 避免 MySQL 还在初始化时 monitor 就开始连接
+        condition: service_healthy
+
+volumes:
+  mysql_data:
+    driver: local
+```
+
+---
+```bash
+# 构建镜像
+docker build -t mysql-monitor .
+
+# 启动容器（指定环境变量）
+docker run -d \
+  --name mysql_monitor \
+  -e DB_HOST=192.168.1.100 \
+  -e DB_PORT=3306 \
+  -e DB_USER=root \
+  -e DB_PASS=yourpassword \
+  -v $(pwd)/log:/data \
+  mysql-monitor
+
+# 两种查看日志的方式
+docker logs mysql_monitor
+docker exec -it mysql_monitor tail -f /data/log
+
+# docker-compose 启动
+# 启动所有服务
+docker-compose up -d
+
+# 查看日志
+docker logs mysql_monitor
+docker exec -it mysql_monitor tail -f /data/log
+
+# 停止
+docker-compose down
+```
