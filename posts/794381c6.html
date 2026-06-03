@@ -21,14 +21,14 @@
   
     <meta name="description" content="2019-07-26-Review">
 <meta property="og:type" content="article">
-<meta property="og:title" content="review">
+<meta property="og:title" content="interview">
 <meta property="og:url" content="https://anyue967.github.io/posts/794381c6.html">
 <meta property="og:site_name" content="旅行の梦">
 <meta property="og:description" content="2019-07-26-Review">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://anyue967.github.io/img/bg/002.jpg">
 <meta property="article:published_time" content="2019-07-26T02:49:34.000Z">
-<meta property="article:modified_time" content="2026-04-23T08:19:58.574Z">
+<meta property="article:modified_time" content="2026-06-02T08:51:38.254Z">
 <meta property="article:author" content="anyu967">
 <meta property="article:tag" content="Devops">
 <meta property="article:tag" content="linux">
@@ -39,7 +39,7 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>review - 旅行の梦</title>
+  <title>interview - 旅行の梦</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -262,7 +262,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="review"></span>
+            <span id="subtitle" data-typed-text="interview"></span>
           
         </div>
 
@@ -285,7 +285,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          4.9k 字
+          5.7k 字
         
       </span>
     
@@ -296,7 +296,7 @@
         
         
         
-          41 分钟
+          48 分钟
         
       </span>
     
@@ -342,7 +342,7 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">review</h1>
+            <h1 id="seo-header">interview</h1>
             
             
               <div class="markdown-body">
@@ -738,6 +738,30 @@ id="除dns外还可以通过什么方式进行域名解析缺点">除DNS外，�
 <li>单用户模式编辑inittab文件</li>
 </ul></li>
 </ul>
+<h3 id="docker-测试">docker 测试</h3>
+<blockquote>
+<p>编写 Dockerfile ，构建⼀个Docker镜像（不能包含 MySQL
+服务端程序），实现以下功能：</p>
+<p>镜像中包含⼀个 shell 脚本，容器启动后每隔 <code>30s</code> 收集 MySQL
+数据库当前的连接数，将数据同时输出⾄ /data/log
+⽂件（⽇志可以持久化保存）及标准输出中数据库IP、端⼝、⽤户及密码可以在容器启动时通过
+-e 指定环境变量来修改要求容器启动后可以使⽤
+<code>docker logs container_name</code> 和
+<code>docker exec -i -t container_name tail -f /data/log</code>
+两种⽅式查看⽇志信息每次输出的信息格式如下
+<code>[2019-01-01 00:00:00] Number of active DB connections is 10.</code></p>
+</blockquote>
+<hr />
+<blockquote>
+<p>编写 docker-compose.yml 脚本，使⽤上述Dockerfile中构建的镜像及 MySQL
+镜像启动服务</p>
+</blockquote>
+<h2 id="section"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># monitor.sh</span><br><br><span class="hljs-comment">#!/bin/bash</span><br><span class="hljs-comment"># 默认环境变量（容器启动时可通过 -e 覆盖）</span><br><span class="hljs-comment"># 脚本里的写法（Dockerfile ENV未设时的兜底）</span><br>DB_HOST=<span class="hljs-variable">$&#123;DB_HOST:-&quot;127.0.0.1&quot;&#125;</span><br>DB_PORT=<span class="hljs-variable">$&#123;DB_PORT:-&quot;3306&quot;&#125;</span><br>DB_USER=<span class="hljs-variable">$&#123;DB_USER:-&quot;root&quot;&#125;</span><br>DB_PASS=<span class="hljs-variable">$&#123;DB_PASS:-&quot;root&quot;&#125;</span><br><br><span class="hljs-comment"># 确保日志目录存在</span><br><span class="hljs-built_in">mkdir</span> -p /data<br><span class="hljs-built_in">touch</span> /data/log<br><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;MySQL Monitor starting...&quot;</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Connecting to <span class="hljs-variable">$&#123;DB_HOST&#125;</span>:<span class="hljs-variable">$&#123;DB_PORT&#125;</span> as <span class="hljs-variable">$&#123;DB_USER&#125;</span>&quot;</span><br><br><span class="hljs-keyword">while</span> <span class="hljs-literal">true</span>; <span class="hljs-keyword">do</span><br>    <span class="hljs-comment"># 获取当前时间</span><br>    TIMESTAMP=$(<span class="hljs-built_in">date</span> <span class="hljs-string">&quot;+%Y-%m-%d %H:%M:%S&quot;</span>)<br><br>    <span class="hljs-comment"># 查询当前连接数</span><br>    <span class="hljs-comment"># SHOW STATUS LIKE &#x27;Threads_connected&#x27; 返回当前活跃连接数</span><br>    CONNECTIONS=$(mysql \<br>        -h <span class="hljs-string">&quot;<span class="hljs-variable">$&#123;DB_HOST&#125;</span>&quot;</span> \<br>        -P <span class="hljs-string">&quot;<span class="hljs-variable">$&#123;DB_PORT&#125;</span>&quot;</span> \<br>        -u <span class="hljs-string">&quot;<span class="hljs-variable">$&#123;DB_USER&#125;</span>&quot;</span> \<br>        -p <span class="hljs-string">&quot;<span class="hljs-variable">$&#123;DB_PASS&#125;</span>&quot;</span> \<br>        --connect-timeout=5 \<br>        -ss \<br>        -e <span class="hljs-string">&quot;SHOW STATUS LIKE &#x27;Threads_connected&#x27;;&quot;</span> 2&gt;/dev/null | awk <span class="hljs-string">&#x27;&#123;print $2&#125;&#x27;</span>)<br><br>    <span class="hljs-comment"># 判断是否获取成功</span><br>    <span class="hljs-keyword">if</span> [ -z <span class="hljs-string">&quot;<span class="hljs-variable">$&#123;CONNECTIONS&#125;</span>&quot;</span> ]; <span class="hljs-keyword">then</span><br>        MSG=<span class="hljs-string">&quot;[<span class="hljs-variable">$&#123;TIMESTAMP&#125;</span>] ERROR: Failed to connect to MySQL at <span class="hljs-variable">$&#123;DB_HOST&#125;</span>:<span class="hljs-variable">$&#123;DB_PORT&#125;</span>&quot;</span><br>    <span class="hljs-keyword">else</span><br>        MSG=<span class="hljs-string">&quot;[<span class="hljs-variable">$&#123;TIMESTAMP&#125;</span>] Number of active DB connections is <span class="hljs-variable">$&#123;CONNECTIONS&#125;</span>.&quot;</span><br>    <span class="hljs-keyword">fi</span><br><br>    <span class="hljs-comment"># 同时输出到日志文件和标准输出（tee实现双输出）</span><br>    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$&#123;MSG&#125;</span>&quot;</span> | <span class="hljs-built_in">tee</span> -a /data/log<br><br>    <span class="hljs-comment"># 等待30秒</span><br>    <span class="hljs-built_in">sleep</span> 30<br><span class="hljs-keyword">done</span><br></code></pre></td></tr></table></figure></h2>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-comment"># Dockerfile.yml</span><br><span class="hljs-comment"># 使用轻量级alpine镜像，体积小</span><br><span class="hljs-string">FROM</span> <span class="hljs-string">alpine:3.18</span><br> <br><span class="hljs-comment"># 安装 mysql-client 和 bash</span><br><span class="hljs-comment"># alpine默认用sh，安装bash保证脚本兼容性</span><br><span class="hljs-string">RUN</span> <span class="hljs-string">apk</span> <span class="hljs-string">add</span> <span class="hljs-string">--no-cache</span> <span class="hljs-string">\</span><br>    <span class="hljs-string">mysql-client</span> <span class="hljs-string">\</span><br>    <span class="hljs-string">bash</span><br> <br><span class="hljs-comment"># 构建指令 创建日志目录</span><br><span class="hljs-string">RUN</span> <span class="hljs-string">mkdir</span> <span class="hljs-string">-p</span> <span class="hljs-string">/data</span><br> <br><span class="hljs-comment"># 设置默认环境变量（容器启动时可通过 -e 覆盖）</span><br><span class="hljs-string">ENV</span> <span class="hljs-string">DB_HOST=127.0.0.1</span> <span class="hljs-string">\</span><br>    <span class="hljs-string">DB_PORT=3306</span> <span class="hljs-string">\</span><br>    <span class="hljs-string">DB_USER=root</span> <span class="hljs-string">\</span><br>    <span class="hljs-string">DB_PASS=root</span><br> <br><span class="hljs-comment"># 复制监控脚本到镜像</span><br><span class="hljs-string">COPY</span> <span class="hljs-string">monitor.sh</span> <span class="hljs-string">/usr/local/bin/monitor.sh</span><br> <br><span class="hljs-comment"># 赋予执行权限</span><br><span class="hljs-string">RUN</span> <span class="hljs-string">chmod</span> <span class="hljs-string">+x</span> <span class="hljs-string">/usr/local/bin/monitor.sh</span><br> <br><span class="hljs-comment"># 声明挂载点（/data目录可映射到宿主机实现持久化）</span><br><span class="hljs-string">VOLUME</span> [<span class="hljs-string">&quot;/data&quot;</span>]<br> <br><span class="hljs-comment"># 容器启动时执行监控脚本</span><br><span class="hljs-string">CMD</span> [<span class="hljs-string">&quot;/usr/local/bin/monitor.sh&quot;</span>]<br></code></pre></td></tr></table></figure>
+<hr />
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-comment"># docker-compose.yml</span><br><span class="hljs-attr">version:</span> <span class="hljs-string">&#x27;3.8&#x27;</span><br><br><span class="hljs-attr">services:</span><br>  <span class="hljs-comment"># MySQL服务</span><br>  <span class="hljs-attr">mysql:</span><br>    <span class="hljs-attr">image:</span> <span class="hljs-string">mysql:8.0</span><br>    <span class="hljs-attr">container_name:</span> <span class="hljs-string">mysql_server</span><br>    <span class="hljs-comment"># 保证容器意外退出时自动重启</span><br>    <span class="hljs-attr">restart:</span> <span class="hljs-string">unless-stopped</span><br>    <span class="hljs-attr">command:</span> <span class="hljs-string">--default-authentication-plugin=mysql_native_password</span><br>    <span class="hljs-attr">environment:</span><br>      <span class="hljs-attr">MYSQL_ROOT_PASSWORD:</span> <span class="hljs-string">root123</span><br>      <span class="hljs-attr">MYSQL_DATABASE:</span> <span class="hljs-string">testdb</span><br>    <span class="hljs-attr">ports:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;3306:3306&quot;</span><br>    <span class="hljs-attr">volumes:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">mysql_data:/var/lib/mysql</span><br>    <span class="hljs-attr">healthcheck:</span><br>      <span class="hljs-attr">test:</span> [<span class="hljs-string">&quot;CMD&quot;</span>, <span class="hljs-string">&quot;mysqladmin&quot;</span>, <span class="hljs-string">&quot;ping&quot;</span>, <span class="hljs-string">&quot;-h&quot;</span>, <span class="hljs-string">&quot;localhost&quot;</span>, <span class="hljs-string">&quot;-uroot&quot;</span>, <span class="hljs-string">&quot;-proot123&quot;</span>]<br>      <span class="hljs-attr">interval:</span> <span class="hljs-string">10s</span><br>      <span class="hljs-attr">timeout:</span> <span class="hljs-string">5s</span><br>      <span class="hljs-attr">retries:</span> <span class="hljs-number">10</span><br>      <span class="hljs-attr">start_period:</span> <span class="hljs-string">60s</span><br><br>  <span class="hljs-comment"># MySQL连接数监控服务（使用题目1构建的镜像）</span><br>  <span class="hljs-attr">mysql-monitor:</span><br>    <span class="hljs-attr">build:</span><br>      <span class="hljs-attr">context:</span> <span class="hljs-string">.</span><br>      <span class="hljs-attr">dockerfile:</span> <span class="hljs-string">Dockerfile</span><br>    <span class="hljs-attr">image:</span> <span class="hljs-string">mysql-monitor:latest</span><br>    <span class="hljs-attr">container_name:</span> <span class="hljs-string">mysql_monitor</span><br>    <span class="hljs-attr">restart:</span> <span class="hljs-string">unless-stopped</span><br>    <span class="hljs-attr">environment:</span><br>      <span class="hljs-comment"># 通过服务名访问MySQL（compose内部DNS自动解析）</span><br>      <span class="hljs-attr">DB_HOST:</span> <span class="hljs-string">mysql</span><br>      <span class="hljs-attr">DB_PORT:</span> <span class="hljs-number">3306</span><br>      <span class="hljs-attr">DB_USER:</span> <span class="hljs-string">root</span><br>      <span class="hljs-attr">DB_PASS:</span> <span class="hljs-string">root123</span><br>    <span class="hljs-attr">volumes:</span><br>      <span class="hljs-comment"># 将/data目录挂载到宿主机，实现日志持久化</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">./logs:/data</span><br>    <span class="hljs-attr">depends_on:</span><br>      <span class="hljs-attr">mysql:</span><br>      <span class="hljs-comment"># 避免 MySQL 还在初始化时 monitor 就开始连接</span><br>        <span class="hljs-attr">condition:</span> <span class="hljs-string">service_healthy</span><br><br><span class="hljs-attr">volumes:</span><br>  <span class="hljs-attr">mysql_data:</span><br>    <span class="hljs-attr">driver:</span> <span class="hljs-string">local</span><br></code></pre></td></tr></table></figure>
+<hr />
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 构建镜像</span><br>docker build -t mysql-monitor .<br><br><span class="hljs-comment"># 启动容器（指定环境变量）</span><br>docker run -d \<br>  --name mysql_monitor \<br>  -e DB_HOST=192.168.1.100 \<br>  -e DB_PORT=3306 \<br>  -e DB_USER=root \<br>  -e DB_PASS=yourpassword \<br>  -v $(<span class="hljs-built_in">pwd</span>)/log:/data \<br>  mysql-monitor<br><br><span class="hljs-comment"># 两种查看日志的方式</span><br>docker logs mysql_monitor<br>docker <span class="hljs-built_in">exec</span> -it mysql_monitor <span class="hljs-built_in">tail</span> -f /data/log<br><br><span class="hljs-comment"># docker-compose 启动</span><br><span class="hljs-comment"># 启动所有服务</span><br>docker-compose up -d<br><br><span class="hljs-comment"># 查看日志</span><br>docker logs mysql_monitor<br>docker <span class="hljs-built_in">exec</span> -it mysql_monitor <span class="hljs-built_in">tail</span> -f /data/log<br><br><span class="hljs-comment"># 停止</span><br>docker-compose down<br></code></pre></td></tr></table></figure>
 
                 
               </div>
@@ -785,7 +809,7 @@ id="除dns外还可以通过什么方式进行域名解析缺点">除DNS外，�
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>review</div>
+      <div>interview</div>
       <div>https://anyue967.github.io/posts/794381c6.html</div>
     </div>
     <div class="license-meta">

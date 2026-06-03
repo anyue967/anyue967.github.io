@@ -28,9 +28,10 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://anyue967.github.io/img/bg/005.jpg">
 <meta property="article:published_time" content="2019-06-09T00:49:34.000Z">
-<meta property="article:modified_time" content="2026-04-23T09:08:37.117Z">
+<meta property="article:modified_time" content="2026-06-03T08:37:44.152Z">
 <meta property="article:author" content="anyu967">
 <meta property="article:tag" content="Mysql">
+<meta property="article:tag" content="SQL">
 <meta property="article:tag" content="数据库">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://anyue967.github.io/img/bg/005.jpg">
@@ -377,6 +378,7 @@
 <li><a href="#授权查看权限解除权限">授权/查看权限/解除权限</a></li>
 </ul></li>
 <li><a href="#忘记密码问题解决">忘记密码问题解决</a></li>
+<li><a href="#测试数据">测试数据</a></li>
 </ul>
 <h3 id="basic-sql-commands">Basic SQL Commands:</h3>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs SQL"><span class="hljs-keyword">SHOW</span>	<span class="hljs-keyword">SELECT</span>  <span class="hljs-keyword">INSERT</span>  <span class="hljs-keyword">CREATE</span>  <span class="hljs-keyword">UPDATE</span>  <span class="hljs-keyword">DELETE</span>  <span class="hljs-keyword">GRANT</span>	<span class="hljs-keyword">REVOKE</span>	<span class="hljs-keyword">CREATE</span>  <br></code></pre></td></tr></table></figure>
@@ -446,6 +448,9 @@
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs SQL"><span class="hljs-keyword">GRANT</span> 权限<span class="hljs-number">1</span>,...权限n <span class="hljs-keyword">ON</span> 数据库.<span class="hljs-operator">*</span> <span class="hljs-keyword">TO</span> 用户名<span class="hljs-variable">@IP</span>地址;<br><span class="hljs-keyword">GRANT</span> <span class="hljs-keyword">ALL</span> PRIVILEGES <span class="hljs-keyword">ON</span> 数据库.<span class="hljs-operator">*</span> <span class="hljs-keyword">TO</span> 用户名<span class="hljs-variable">@IP</span>地址;<br><br><span class="hljs-keyword">SHOW</span> GRANTS <span class="hljs-keyword">FOR</span> 用户名<span class="hljs-variable">@IP</span>地址;<br><br><span class="hljs-keyword">REVOKE</span> 权限<span class="hljs-number">1</span>,...权限n <span class="hljs-keyword">ON</span> 数据库.<span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> 用户名<span class="hljs-variable">@IP</span>地址;<br><span class="hljs-keyword">REVOKE</span> <span class="hljs-keyword">ALL</span> PRIVILEGES <span class="hljs-keyword">ON</span> 数据库.<span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> 用户名<span class="hljs-variable">@IP</span>地址;<br></code></pre></td></tr></table></figure>
 <h3 id="忘记密码问题解决">忘记密码问题解决</h3>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs bash">service mysql stop <br>mysqld_safe --user=mysql --skip-grant-tables --skip-networking &amp;   <span class="hljs-comment"># 跳过授权表模式  </span><br>mysql -uroot -p    <span class="hljs-comment"># 不输密码直接回车</span><br>use mysql;<br>update user <span class="hljs-built_in">set</span> password=PASSWORD(<span class="hljs-string">&quot;123&quot;</span>) <span class="hljs-built_in">where</span> user =<span class="hljs-string">&#x27;root&#x27;</span>;  <span class="hljs-comment"># 设置新密码为123  </span><br>flush privileges;  <br>quit;<br><br>service mysql stop   <br>service mysql start     <span class="hljs-comment"># 以正常模式启动</span><br>mysql -u root -p        <span class="hljs-comment"># 回车输入新密码即可 </span><br><br>MariaDB [(none)]&gt; delete from user <span class="hljs-built_in">where</span> user=<span class="hljs-string">&#x27;&#x27;</span>;<br>MariaDB [(none)]&gt; delete from user <span class="hljs-built_in">where</span> password=<span class="hljs-string">&#x27;&#x27;</span>;  <br>MariaDB [(none)]&gt; create database anyue default character <span class="hljs-built_in">set</span> latin1;  <br>[root@xingyue masR5]# mysql -uroot -p123456 anyue &lt; masR5.sql --default-character-set=lantin1<br></code></pre></td></tr></table></figure>
+<h3 id="测试数据">测试数据</h3>
+<p><a
+target="_blank" rel="noopener" href="https://dev.mysql.com/doc/employee/en/employees-installation.html">下载测试数据</a></p>
 <p><a href="#目录" target="_self">回到顶部</a></p>
 
                 
@@ -465,7 +470,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/SQL/" class="category-chain-item">SQL</a>
+  <a href="/categories/Programming/" class="category-chain-item">Programming</a>
   
   
 
@@ -483,6 +488,8 @@
         <a href="/tags/Mysql/" class="print-no-link">#Mysql</a>
       
         <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" class="print-no-link">#数据库</a>
+      
+        <a href="/tags/SQL/" class="print-no-link">#SQL</a>
       
     </div>
   

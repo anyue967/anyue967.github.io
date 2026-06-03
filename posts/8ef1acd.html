@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://anyue967.github.io/img/bg/003.jpg">
 <meta property="article:published_time" content="2019-06-08T23:49:34.000Z">
-<meta property="article:modified_time" content="2026-04-23T09:04:33.782Z">
+<meta property="article:modified_time" content="2026-06-03T08:38:07.403Z">
 <meta property="article:author" content="anyu967">
 <meta property="article:tag" content="bat">
 <meta name="twitter:card" content="summary_large_image">
@@ -284,7 +284,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          742 字
+          1.4k 字
         
       </span>
     
@@ -295,7 +295,7 @@
         
         
         
-          7 分钟
+          12 分钟
         
       </span>
     
@@ -347,12 +347,6 @@
               <div class="markdown-body">
                 
                 <p>2019-06-09-BatShell <span id="more"></span></p>
-<ul>
-<li><a href="#windows-bat-脚本">Windows bat 脚本</a>
-<ul>
-<li><a href="#语法">语法：</a></li>
-</ul></li>
-</ul>
 <h1 id="windows-bat-脚本">Windows bat 脚本</h1>
 <blockquote>
 <p>批处理文件，在DOS和Windows（任意）系统中，.bat文件是可执行文件，由一系列命令构成，其中可以包含对其他程序的调用。
@@ -412,6 +406,26 @@
 <li><p><strong>%源字符串:~起始值,截取长度%</strong>
 (起始值从0开始；截取长度是可选的，如果省略逗号和截取长度，将会从起始值截取到结尾；</p></li>
 </ul>
+<h1 id="wsl">WSL</h1>
+<h2 id="介绍wsl">介绍WSL</h2>
+<blockquote>
+<p>Windows Subsystem for Linux (WSL) 是一个在 Windows 上运行 Linux
+应用程序的子系统。</p>
+</blockquote>
+<h2 id="wsl安装"><a
+target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/wsl/install">WSL安装</a></h2>
+<ol type="1">
+<li>打开 PowerShell，输入 <code>wsl --install</code></li>
+<li>验证: <code>wsl -v</code></li>
+</ol>
+<h2 id="wsl-安装-ubuntu">WSL 安装 Ubuntu</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">wsl --list --online <span class="hljs-comment"># 查看可用的 Linux 发行版</span><br>wsl --install -d Ubuntu <span class="hljs-comment"># 安装 Ubuntu</span><br><br><span class="hljs-comment"># 空间占用：刚安装时很小，约 2GB - 4GB。但随着您在 Linux 中安装软件、存放数据，它会自动扩容，可能会占用几十 GB。</span><br><span class="hljs-comment"># 默认盘符：默认存放在 C 盘。</span><br><span class="hljs-comment"># 具体路径：它作为一个虚拟硬盘文件（ext4.vhdx）存放在 C 盘的用户应用数据文件夹中：C:\Users\您的用户名\AppData\Local\Packages\...\LocalState\ext4.vhdx</span><br></code></pre></td></tr></table></figure>
+<h2 id="wsl-卸载">WSL 卸载</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs bash">wsl -l -v <span class="hljs-comment"># 查看已安装的 Linux 发行版</span><br>wsl --unregister &lt;发行版名称&gt;   <span class="hljs-comment"># 卸载指定的 Linux 发行版</span><br><br><span class="hljs-comment"># 卸载 WSL 相关的应用软件</span><br>1. 打开 Windows 「设置」 -&gt; 「应用」 -&gt; 「安装的应用」（或「应用和功能」）。<br>2. 在搜索框中搜索 WSL 和您安装的系统名称。<br>3. 依次点击右侧的三个点，选择 「卸载」 以下组件：<br>   - Windows Subsystem <span class="hljs-keyword">for</span> Linux（Windows 适用于 Linux 的子系统）<br>   - Windows Subsystem <span class="hljs-keyword">for</span> Linux Update<br>   - Ubuntu（或您安装的其他系统，如 Debian, Kali 等）<br><br><span class="hljs-comment"># 关闭 Windows 底层虚拟化功能（可选）</span><br><span class="hljs-comment"># 如果以后完全不再使用 WSL 和任何虚拟机，可以关闭系统底层功能：</span><br>1. 在 Windows 搜索框输入 「打开或关闭 Windows 功能」 并打开。<br>2. 取消勾选以下两个选项：<br>  - 适用于 Linux 的 Windows 子系统<br>  - 虚拟机平台<br>  - 点击「确定」，并根据提示重启电脑。<br></code></pre></td></tr></table></figure>
+<h2 id="wsl-彻底卸载与注销">WSL 彻底卸载与注销</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">wsl --unregister Ubuntu <span class="hljs-comment"># 秒删该 Linux 系统并立即释放其占用的全部 C 盘空间</span><br><br><span class="hljs-comment"># 打开 Windows 的 「设置」-&gt;「应用」-&gt;「安装的应用」，在列表中找到 Ubuntu，点击右侧的三个点选择 「卸载」 即可</span><br></code></pre></td></tr></table></figure>
+<h2 id="wsl-迁移">WSL 迁移</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 已安装</span><br><span class="hljs-built_in">mkdir</span> D:\WSL\Ubuntu<br>wsl --<span class="hljs-built_in">export</span> Ubuntu D:\WSL\Ubuntu.tar <span class="hljs-comment"># 将现有的系统打包备份到 D 盘</span><br>wsl --unregister Ubuntu <span class="hljs-comment"># 注销 C 盘的旧系统</span><br>wsl --import Ubuntu D:\WSL\Ubuntu D:\WSL\Ubuntu.tar --version 2 <span class="hljs-comment"># 将备份的系统导入到 D 盘的新文件夹中，重新注册</span><br>Ubuntu config --default-user 您的用户名 <span class="hljs-comment"># 设置默认用户</span><br><br><span class="hljs-comment"># 未安装子系统</span><br>wsl --list --online <span class="hljs-comment"># 查看可用的发行版列表</span><br><br><span class="hljs-comment"># 不从微软商店装，直接下载tar包：去 https://learn.microsoft.com/zh-cn/windows/wsl/install-manual 下载对应发行版的 .appx 文件。</span><br><span class="hljs-comment"># 将下载好的 .appx 文件的后缀名直接重命名为 .zip, 解压这个 .zip 文件，在解压出来的文件夹里，找到一个名为 install.tar.gz</span><br><br><span class="hljs-built_in">mkdir</span> D:\WSL\Ubuntu <span class="hljs-comment"># 创建 D 盘的新文件夹</span><br>wsl --import &lt;你给系统起的名字&gt; E:\WSL\Ubuntu E:\WSL\install.tar.gz<br>adduser myuser <span class="hljs-comment"># PowerShell 中输入 wsl 进入系统</span><br>usermod -aG <span class="hljs-built_in">sudo</span> myuser <span class="hljs-comment"># 添加用户到 sudo 组</span><br>Ubuntu config --default-user myuser <span class="hljs-comment"># 设置默认用户为 myuser</span><br></code></pre></td></tr></table></figure>
 
                 
               </div>
@@ -430,7 +444,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/CRH/" class="category-chain-item">CRH</a>
+  <a href="/categories/Programming/" class="category-chain-item">Programming</a>
   
   
 

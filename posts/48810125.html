@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://anyue967.github.io/img/bg/002.jpg">
 <meta property="article:published_time" content="2019-06-12T02:30:30.000Z">
-<meta property="article:modified_time" content="2026-04-24T10:16:13.725Z">
+<meta property="article:modified_time" content="2026-05-28T12:09:37.439Z">
 <meta property="article:author" content="anyu967">
 <meta property="article:tag" content="Devops">
 <meta property="article:tag" content="linux">
@@ -285,7 +285,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.7k 字
+          3k 字
         
       </span>
     
@@ -296,7 +296,7 @@
         
         
         
-          23 分钟
+          25 分钟
         
       </span>
     
@@ -446,6 +446,9 @@ Protocol)</li>
 <p><strong>linux 监控插件(nrpe), linux端</strong><br />
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@anyue ~]# useradd nagios <br>[root@xy ~]# tar -xzvf nagios-plugins-1.4.15.tar.gz <br>[root@xy nagios-plugins-1.4.15]# ./configure --with-nagios-user=nagios --with-nagios-group=nagios   <br>[root@xy nagios-plugins-1.4.15]# make all &amp;&amp;  make install <br>[root@anyue nagios]# tar -xzf nrpe-3.2.1.tar.gz<br>[root@anyue nrpe-3.2.1]# ./configure --enable-ssl --with-ssl-lib=/usr/lib64/  <br>[root@anyue nrpe-3.2.1]# make all <br>[root@anyue nrpe-3.2.1]# make install-plugin<br>[root@anyue nrpe-3.2.1]# make install-daemon<br>[root@anyue nrpe-3.2.1]# make install-daemon-config<br>[root@anyue nrpe-3.2.1]# <span class="hljs-built_in">cd</span> /usr/local/nagios/etc/nrpe.cfg <br>  allowed_hosts=serverIP 127.0.0.1<br>[root@anyue etc]# /usr/local/nagios/bin/nrpe -c /usr/local/nagios/etc/nrpe.cfg -d  <span class="hljs-comment"># tcp/5666</span><br></code></pre></td></tr></table></figure></p>
 <h3 id="zabbix-监控构建">3. Zabbix 监控构建</h3>
+<p><a
+target="_blank" rel="noopener" href="https://www.zabbix.com/cn/download?zabbix=7.0&amp;os_distribution=rocky_linux&amp;os_version=9&amp;components=server_frontend_agent_2&amp;db=mysql&amp;ws=nginx">下载安装Zabbix</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 乱码问题解决</span><br><br><span class="hljs-comment"># 第一步：准备中文字体</span><br>从你的 Windows 电脑中获取中文字体文件（路径通常为 C:\Windows\Fonts）。推荐选择 宋体（simsun.ttf）或 楷体（simkai.ttf）。将字体文件重命名为英文或拼音，例如：simhei.ttf<br><br><span class="hljs-comment"># 第二步：上传并替换 Zabbix 字体</span><br>登录 Zabbix 服务器，找到网站的字体目录。<br>- 常见路径（源码安装）：/usr/local/zabbix/php/assets/fonts/ 或 /data/wwwroot/zabbix/assets/fonts/<br>- 常见路径（RPM/包管理器安装）：/usr/share/zabbix/assets/fonts/<br>- （老版本可能在 /usr/share/zabbix/fonts/ 或 /usr/share/zabbix/include/fonts/）<br><br>将准备好的字体文件上传到该目录下。修改 Zabbix 的字体配置文件以应用新字体：使用文本编辑器打开 /usr/share/zabbix/include/defines.inc.php（或对应的 Zabbix 前端配置文件）。<br><br>找到以下两行代码（旧版本或直接使用默认字体名称）：<br>- define(<span class="hljs-string">&#x27;ZBX_FONT_NAME&#x27;</span>, <span class="hljs-string">&#x27;DejaVuSans&#x27;</span>);<br>- define(<span class="hljs-string">&#x27;ZBX_GRAPH_FONT_NAME&#x27;</span>, <span class="hljs-string">&#x27;DejaVuSans&#x27;</span>);<br><br>将 DejaVuSans 替换为上传的字体文件名（不包含 .ttf 或 .ttc 后缀），例如 simhei<br></code></pre></td></tr></table></figure>
 <h4 id="初始化系统">3.1 初始化系统</h4>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@xy ~]# systemctl stop firewalld  <br>[root@xy ~]# systemctl <span class="hljs-built_in">disable</span> firewalld  <br>[root@xy ~]# setenforce 0<br>[root@xy ~]# sed -i <span class="hljs-string">&quot;s/SELINUX=enforcing/SELINUX=disabled/g&quot;</span> /etc/selinux/config <br></code></pre></td></tr></table></figure>
 <h4 id="构建-lamp-环境">3.2 构建 LAMP 环境</h4>
