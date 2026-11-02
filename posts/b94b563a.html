@@ -1,0 +1,974 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/bg/icon.jpg">
+  <link rel="icon" href="/img/bg/icon.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="anyu967">
+  <meta name="keywords" content="web,web前端,js,javascript,Devops,linux">
+  
+    <meta name="description" content="2019-07-16-DockFile">
+<meta property="og:type" content="article">
+<meta property="og:title" content="dockerFile">
+<meta property="og:url" content="https://anyu967.github.io/posts/b94b563a.html">
+<meta property="og:site_name" content="旅行の梦">
+<meta property="og:description" content="2019-07-16-DockFile">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://anyu967.github.io/img/bg/008.jpg">
+<meta property="article:published_time" content="2019-07-16T10:25:16.000Z">
+<meta property="article:modified_time" content="2026-09-14T17:27:17.184Z">
+<meta property="article:author" content="anyu967">
+<meta property="article:tag" content="docker">
+<meta property="article:tag" content="dockerfile">
+<meta property="article:tag" content="k8s">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://anyu967.github.io/img/bg/008.jpg">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>dockerFile - 旅行の梦</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/macpanel.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"anyu967.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"><link rel="alternate" href="/atom.xml" title="旅行の梦" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>旅行の梦</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-bookmark"></i>
+                <span>收藏</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/bookmark/" target="_self">
+                    <i class="iconfont icon-map"></i>
+                    <span>导航</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/gallery/" target="_self">
+                    <i class="iconfont icon-image"></i>
+                    <span>图库</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/video/" target="_self">
+                    <i class="iconfont icon-snapchat-fill"></i>
+                    <span>影视</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="dockerFile"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-07-16 18:25" pubdate>
+          2019年7月16日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          13 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">dockerFile</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>2019-07-16-DockFile <span id="more"></span></p>
+<ul>
+<li><a href="#dockerfile-语法">DockerFile 语法</a>
+<ul>
+<li><a href="#docker_practice">docker_practice</a></li>
+<li><a href="#运行">运行</a></li>
+<li><a href="#from----指定基础image">FROM – 指定基础image</a></li>
+<li><a href="#maintainer---指定镜像创建者信息">MAINTAINER
+–指定镜像创建者信息</a></li>
+<li><a href="#run---安装软件用">RUN –安装软件用</a></li>
+<li><a href="#cmd---设置-container-启动时执行的操作覆盖">CMD –设置
+container 启动时执行的操作(覆盖)</a></li>
+<li><a href="#entrypoint---设置-container-启动执行的操作追加">ENTRYPOINT
+–设置 container 启动执行的操作(追加)</a></li>
+<li><a href="#user---设置-container-用户">USER –设置 container
+用户</a></li>
+<li><a href="#expose---指定容器需要映射到宿主机的端口">EXPOSE
+–指定容器需要映射到宿主机的端口</a></li>
+<li><a href="#env---用于设置环境变量">ENV –用于设置环境变量</a></li>
+<li><a
+href="#add---从-src-复制文件到-container-的-dest-路径解包后拷贝">ADD –从
+src 复制文件到 container 的 dest 路径(解包后拷贝)</a></li>
+<li><a href="#copy---从-src-复制文件到-container-的-dest-路径">COPY –从
+src 复制文件到 container 的 dest 路径</a></li>
+</ul></li>
+<li><a href="#volume---指定挂载点">VOLUME –指定挂载点</a>
+<ul>
+<li><a href="#workdir---切换目录">WORKDIR –切换目录</a></li>
+<li><a href="#onbuild---在子镜像中执行">ONBUILD –在子镜像中执行</a></li>
+<li><a href="#构建示例构建php">构建示例(构建PHP)</a></li>
+</ul></li>
+<li><a href="#构建示例构建java">构建示例(构建JAVA)</a>
+<ul>
+<li><a href="#构建示例tomcat">构建示例(tomcat)</a></li>
+</ul></li>
+</ul>
+<h3 id="dockerfile-语法">DockerFile 语法</h3>
+<h4 id="docker_practice"><a
+target="_blank" rel="noopener" href="https://github.com/yeasy/docker_practice">docker_practice</a></h4>
+<h4 id="运行">运行</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker run -it --<span class="hljs-built_in">rm</span> -p 4000:80 dockerpracticesig/docker_practice<br><span class="hljs-comment"># localhost:4000</span><br></code></pre></td></tr></table></figure>
+<h4 id="from-指定基础image">FROM – 指定基础image</h4>
+<ul>
+<li>构建指令，必须指定且需要在 DockerFile
+其他指令的前面，后续指令依赖指定的 image，FROM指定的基础 image
+既可以是本地 Repo 也可以是官方的远程仓 <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs Dockerfile"><span class="hljs-keyword">FROM</span> centos:<span class="hljs-number">7.2</span><br><span class="hljs-keyword">FROM</span> centos<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="maintainer-指定镜像创建者信息">MAINTAINER
+–指定镜像创建者信息</h4>
+<ul>
+<li>构建指令，用于将 image 的制作者相关信息写入到 image
+中，当执行<code>docker inspect</code>，输出中有相应的字段记录该信息
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Dockerfile"><span class="hljs-keyword">MAINTAINER</span> username <span class="hljs-string">&quot;username@xxx.com&quot;</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="run-安装软件用">RUN –安装软件用</h4>
+<ul>
+<li>构建指令，RUN 可以运行任何被基础 image 支持的命令，若基础 image 为
+centos，则软件管理部分只能使用 centos 的包管理命令 <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs Dockerfile"><span class="hljs-keyword">RUN</span><span class="language-bash"> <span class="hljs-built_in">cd</span> /tmp &amp;&amp; curl -L <span class="hljs-string">&#x27;http://archive.apache.org.dist/tomcat/tomcat-7/v7.0.8/bin/apache-tomcat-7.0.8.tar.gz&#x27;</span> | tar -xz</span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> [ <span class="hljs-string">&quot;/bin/bash&quot;</span>, <span class="hljs-string">&quot;-c&quot;</span>, <span class="hljs-string">&quot;echo helllo&quot;</span> ]</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="cmd-设置-container-启动时执行的操作覆盖">CMD –设置 <span
+style="color:rgb(255, 0, 255);">container
+启动时执行的操作(覆盖)</span></h4>
+<ul>
+<li>设置指令，用于 container
+启动时指定的操作，该操可以是自定义的脚本，也可以是执行系统的命令，该指令只能在文件中存在一次，若有多个，只执行最后一条
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Dockerfile"><span class="hljs-keyword">CMD</span><span class="language-bash"> <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Hello，World！&quot;</span></span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="entrypoint-设置-container-启动执行的操作追加">ENTRYPOINT –设置
+<span style="color:rgb(255, 0, 255);">container
+启动执行的操作(追加)</span></h4>
+<ul>
+<li><p>设置指令，指定容器启动时执行的操作，可以多次设置，但是只有最后一个有效
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Dockerfile"><span class="hljs-keyword">ENTRYPOINT</span><span class="language-bash"> <span class="hljs-built_in">ls</span> -l</span><br></code></pre></td></tr></table></figure></p></li>
+<li><p>该指令独自使用,
+若还有CMD命令且CMD是一条完整的可执行的命令，则CMD指令和ENTRYPOINT会相互覆盖，只有最后一个CMD
+或 ENTRYPOINT 有效 <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs Dockerfile"><span class="hljs-keyword">CMD</span><span class="language-bash"> <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Hello World&quot;</span></span><br><span class="hljs-keyword">ENTRYPOINT</span><span class="language-bash"> <span class="hljs-built_in">ls</span> -l</span><br><span class="hljs-comment"># CMD 不会执行, ENTRYPOINT有效</span><br></code></pre></td></tr></table></figure></p></li>
+<li><p>该指令与CMD配合使用指定 ENTRYPOINT 的默认参数，则 CMD
+指令不是完整的可执行命令，仅仅是参数部分；ENTRYPOINT 指令只能使用 JSON
+方式 指定执行命令，而不能指定参数 <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs Dockerfile"><span class="hljs-keyword">FROM</span> ubuntu<br><span class="hljs-keyword">CMD</span><span class="language-bash"> [<span class="hljs-string">&quot;-l&quot;</span>]</span><br><span class="hljs-keyword">ENTRYPOINT</span><span class="language-bash"> [<span class="hljs-string">&quot;/usr/bin/ls&quot;</span>]</span><br></code></pre></td></tr></table></figure></p></li>
+</ul>
+<h4 id="user-设置-container-用户">USER –设置 container 用户</h4>
+<ul>
+<li>设置指令，设置启动容器的用户，默认 root 用户 <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Dockerfile"><span class="hljs-keyword">USER</span> daemon = <span class="hljs-keyword">ENTRYPOINT</span><span class="language-bash"> [<span class="hljs-string">&quot;memcached&quot;</span>, <span class="hljs-string">&quot;-u&quot;</span>, <span class="hljs-string">&quot;daemon&quot;</span>]</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="expose-指定容器需要映射到宿主机的端口">EXPOSE
+–指定容器需要映射到宿主机的端口</h4>
+<ul>
+<li>设置指令，会将容器中端口映射成宿主机中的某个端口 <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs Dockerfile"><span class="hljs-keyword">EXPOSE</span> <span class="hljs-number">22</span><br>docker <span class="hljs-keyword">run</span><span class="language-bash"> -p port1 image</span><br><span class="hljs-keyword">EXPOSE</span> port1 port2 port3<br>docker <span class="hljs-keyword">run</span><span class="language-bash"> -p port1 port2 port3 image</span><br>docker <span class="hljs-keyword">run</span><span class="language-bash"> -p host_port1:port1 -p host_port2:port2 -p host_port3:port3 image</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="env-用于设置环境变量">ENV –用于设置环境变量</h4>
+<ul>
+<li>构建指令，在 image 中设置一个环境变量，后续的 RUN
+可以使用，container 启动后，通过 <code>docker inspect</code>
+查看环境变量，或者 <code>docker run --env key=value</code>
+时设置或修改环境变量 <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Dockerfile"><span class="hljs-keyword">ENV</span> JAVA_HOME /path/to/java/dirent<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="add-从-src-复制文件到-container-的-dest-路径解包后拷贝">ADD –从
+src 复制文件到 container 的 dest 路径<span
+style="color:rgb(255, 0, 255);">(解包后拷贝)</span></h4>
+<ul>
+<li>ADD [src] [dest]
+<ul>
+<li>[src] 是相对被构建的源目录的相对路径，可以是 文件或目录
+路径，也可以是远程的文件 url</li>
+<li>[dest] 是container 中的绝对路径</li>
+</ul></li>
+</ul>
+<h4 id="copy-从-src-复制文件到-container-的-dest-路径">COPY –从 src
+复制文件到 container 的 dest 路径</h4>
+<ul>
+<li>COPY [src] [dest]</li>
+</ul>
+<h3 id="volume-指定挂载点">VOLUME –指定挂载点</h3>
+<ul>
+<li>设置指令，使容器中的一个目录具有持久化存储数据的功能，该目录可以被容器本身使用，也可以共享给其他容器使用，因为容器使用的是UFS技术，这种文件系统不能持久化，当容器关闭后，所有更改都会丢失
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs Dockerfile"><span class="hljs-keyword">FROM</span> base<br><span class="hljs-keyword">VOLUME</span><span class="language-bash"> [<span class="hljs-string">&quot;/tmp/data&quot;</span>]</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="workdir-切换目录">WORKDIR –切换目录</h4>
+<ul>
+<li>设置指令，可以多次切换，等同于 cd，对RUN、CMD、ENTRYPOINT生效
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Dockerfile"><span class="hljs-keyword">WORKDIR</span><span class="language-bash"> /p1 WORKDIR p2 RUN vim a.txt  === RUN <span class="hljs-built_in">cd</span> /p1/p2 &amp;&amp; vim a.txt</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="onbuild-在子镜像中执行">ONBUILD –在子镜像中执行</h4>
+<ul>
+<li>在构建镜像时并不执行，而是在它的子镜像中执行 <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs Dockerfile"><span class="hljs-keyword">ONBUILD</span> <span class="hljs-keyword">ADD</span><span class="language-bash"> . /app/src</span><br><span class="hljs-keyword">ONBUILD</span> <span class="hljs-keyword">RUN</span><span class="language-bash"> /usr/local/bin/python-build --<span class="hljs-built_in">dir</span> /app/src</span><br><br>docker build -t imagename .<br><span class="hljs-keyword">FROM</span> hub.c.<span class="hljs-number">163</span>.com/public/centos:<span class="hljs-number">6.7</span><br><span class="hljs-keyword">MAINTAINER</span> xingyue@<span class="hljs-number">163</span>.com<br><span class="hljs-keyword">ADD</span><span class="language-bash"> ./apache-tomcat-7.0.42.tar.gz /root</span><br><span class="hljs-keyword">ADD</span><span class="language-bash"> ./jdk-7u25-linux-x64.tar.gz /root</span><br><span class="hljs-keyword">ENV</span> JAVA_HOME /root/jdk1.<span class="hljs-number">7.0</span>_25<br><span class="hljs-keyword">ENV</span> PATH $JAVA_HOME/bin:$PATH<br><span class="hljs-keyword">EXPOSE</span> <span class="hljs-number">8080</span><br><span class="hljs-keyword">ENTRYPOINT</span><span class="language-bash"> /root/apache-tomcat-7.0.42/bin/startup.sh &amp;&amp; tailf /root/apache-tomcat-7.0.42/logs/catalina.out</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<table>
+
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FROM</td>
+<td>构建基于的镜像</td>
+<td>COPY</td>
+<td>拷贝文件或目录到镜像</td>
+</tr>
+<tr>
+<td>MAINTAINER</td>
+<td>镜像维护者信息</td>
+<td>ENTRYPOINT</td>
+<td><span
+style="color:rgb(255, 0, 255);">运行容器执行的shell命令</span></td>
+</tr>
+<tr>
+<td>RUN</td>
+<td><span
+style="color:rgb(255, 0, 255);">构建镜像运行的shell命令</span></td>
+<td>VOLUME</td>
+<td>指定容器挂载点到宿主机自动生成的目录</td>
+</tr>
+<tr>
+<td>CMD</td>
+<td><span
+style="color:rgb(255, 0, 255);">运行容器执行的shell命令</span></td>
+<td>USER</td>
+<td>为RUN/CMD/ENTRYPOINT执行命令指定用户</td>
+</tr>
+<tr>
+<td>EXPOSE</td>
+<td>容器运行服务端口</td>
+<td>WORKDIR</td>
+<td>为RUN/CMD/ENTRYPOINT设置工作目录</td>
+</tr>
+<tr>
+<td>ENV</td>
+<td>容器内部环境变量</td>
+<td>HEALTHCHECK</td>
+<td>健康检查</td>
+</tr>
+<tr>
+<td>ADD</td>
+<td>拷贝文件或目录到镜像</td>
+<td>ARG</td>
+<td>构建镜像时指定参数(效果同ENV)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="构建示例构建php">构建示例(构建PHP)</h4>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs Dockerfile"><span class="hljs-keyword">FROM</span> centos:<span class="hljs-number">7</span><br><span class="hljs-keyword">MAINTAINER</span> anyue967<br><span class="hljs-keyword">RUN</span><span class="language-bash"> yum install -y gcc gcc-c++ make gd-devel libxml2-devel libcurl-devel libjpeg-devel libpng-devel openssl-devel</span><br><span class="hljs-keyword">ADD</span><span class="language-bash"> php-5.6.31.tar.gz /tmp/</span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> <span class="hljs-built_in">cd</span> /tmp/php-5.6.31 &amp;&amp; \</span><br><span class="language-bash">    ./configure --prefix=/usr/local/php \</span><br><span class="language-bash">    --with-config-file-path=/usr/local/php/etc \</span><br><span class="language-bash">    --with-mysql --with-mysqli \</span><br><span class="language-bash">    --with-openssl --with-zlib --with-curl --with-gd \</span><br><span class="language-bash">    --with-jpeg-dir --with-png-dir --with-iconv \</span><br><span class="language-bash">    --enable-fpm --enable-zip --enable-mbstring &amp;&amp; \</span><br><span class="language-bash">    make -j 4 &amp;&amp; \</span><br><span class="language-bash">    make install &amp;&amp; \</span><br><span class="language-bash">    <span class="hljs-built_in">cp</span> /usr/local/php/etc/php-fpm.conf.default /usr/local/php/etc/php-fpm.conf &amp;&amp; \</span><br><span class="language-bash">    sed -i <span class="hljs-string">&quot;s/127.0.0.1/0.0.0.0/&quot;</span> /usr/local/php/etc/php-fpm.conf &amp;&amp; \</span><br><span class="language-bash">    sed -i <span class="hljs-string">&quot;21a \daemonize = no&quot;</span> /usr/local/php/etc/php-fpm.conf  <span class="hljs-comment"># 21行追加 daemonize = no </span></span><br><span class="hljs-keyword">COPY</span><span class="language-bash"> php.ini /usr/local/php/etc</span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> <span class="hljs-built_in">rm</span> -rf /tmp/php-5.6.31* &amp;&amp; yum clean all</span><br><span class="hljs-keyword">WORKDIR</span><span class="language-bash"> /usr/local/php</span><br><span class="hljs-keyword">EXPOSE</span> <span class="hljs-number">9000</span><br><span class="hljs-keyword">CMD</span><span class="language-bash"> [<span class="hljs-string">&quot;./sbin/php-fpm&quot;</span>, <span class="hljs-string">&quot;-c&quot;</span>, <span class="hljs-string">&quot;/usr/local/php/etc/php-fpm.conf&quot;</span>]</span><br></code></pre></td></tr></table></figure>
+<h3 id="构建示例构建java">构建示例(构建JAVA)</h3>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs Dockerfile"><span class="hljs-keyword">FROM</span> cnetos:<span class="hljs-number">7</span><br><span class="hljs-keyword">MAINTAINER</span> anyue967<br><span class="hljs-keyword">ADD</span><span class="language-bash"> jdk-8u45-linux-64.tar.gz /usr/local</span><br><span class="hljs-keyword">ENV</span> JAVA_HOME /usr/local/jdk1.<span class="hljs-number">8.0</span>_45<br><span class="hljs-keyword">ADD</span><span class="language-bash"> apache-tomcat-8.0.16.tar.gz /usr/local</span><br><span class="hljs-keyword">COPY</span><span class="language-bash"> server.xml /usr/local/apache-tomcat-8.0.46/conf</span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> <span class="hljs-built_in">rm</span> -f /usr/local/*.tar.gz</span><br><span class="hljs-keyword">WORKDIR</span><span class="language-bash"> /usr/local/apache-tomcat-8.0.46</span><br><span class="hljs-keyword">EXPOSE</span> <span class="hljs-number">8080</span><br><span class="hljs-keyword">ENTRYPOINT</span><span class="language-bash"> [<span class="hljs-string">&quot;./bin/catalina.sh&quot;</span>, <span class="hljs-string">&quot;run&quot;</span>]</span><br></code></pre></td></tr></table></figure>
+<h4 id="构建示例tomcat">构建示例(tomcat)</h4>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs Dockerfile"><span class="hljs-keyword">FROM</span> centos<br><span class="hljs-keyword">MAINTAINER</span> anyu967@<span class="hljs-number">163</span>.com<br><span class="hljs-keyword">COPY</span><span class="language-bash"> test.txt /usr/local/container.txt</span><br><span class="hljs-keyword">ADD</span><span class="language-bash"> jdk-8u171-linux-x64.tar.gz /usr/local/</span><br><span class="hljs-keyword">ADD</span><span class="language-bash"> apache-tomcat-9.0.8.tar.gz /usr/local</span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> yum install -y vim</span><br><span class="hljs-keyword">ENV</span> MYPATH /usr/local<br><span class="hljs-keyword">WORKDIR</span><span class="language-bash"> <span class="hljs-variable">$MYPATH</span></span><br><span class="hljs-keyword">ENV</span> JAVA_HOME /usr/local/jdk1.<span class="hljs-number">8.0</span>_171<br><span class="hljs-keyword">ENV</span> CLASSPATH $JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar<br><span class="hljs-keyword">ENV</span> CATALINA_HOME /usr/local/apache-tomcat-<span class="hljs-number">9.0</span>.<span class="hljs-number">8</span><br><span class="hljs-keyword">ENV</span> CATALINA_BASE /usr/local/apache-tomcat-<span class="hljs-number">9.0</span>.<span class="hljs-number">8</span><br>EXPOSED <span class="hljs-number">8080</span><br><span class="hljs-comment"># ENTRYPOINT [&quot;/usr/local/apache-tomcat-9.0.8/bin/startup.sh&quot;]</span><br><span class="hljs-comment"># CMD [&quot;/usr/local/apache-tomcat-9.0.8/bin/catalina.sh&quot;,&quot;run&quot;]</span><br><span class="hljs-keyword">CMD</span><span class="language-bash"> /usr/local/apache-tomcat-9.0.8/bin/startup.sh &amp;&amp; <span class="hljs-built_in">tail</span> -F /usr/local/apache-tomcat-9.0.8/bin/log/catalina.out</span><br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/" class="category-chain-item">云原生</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/docker/" class="print-no-link">#docker</a>
+      
+        <a href="/tags/dockerfile/" class="print-no-link">#dockerfile</a>
+      
+        <a href="/tags/k8s/" class="print-no-link">#k8s</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>dockerFile</div>
+      <div>https://anyu967.github.io/posts/b94b563a.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>anyu967</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年7月16日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/posts/9a7f448e.html" title="Jenkins">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Jenkins</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/posts/5ae6092.html" title="docker基础">
+                        <span class="hidden-mobile">docker基础</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <a href="https://blog.kevinchu.top/atom.xml" target="_blank" rel="nofollow noopener"><i class="iconfont icon-rss"></i>RSS</a> <div style="font-size: 0.85rem"> <span>本网站由</span> <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="_blank" rel="nofollow noopener" ><img src="/img/bg/upyun.png" srcset="/img/loading.gif" lazyload alt="upyun" width="55px" height="30px" style="fill: currentColor;"></a> <span>提供CDN加速/云存储服务<span> </div> <div style="font-size: 0.85rem"> <span id="timeDate">载入天数...</span> <span id="times">载入时分秒...</span> <script src="/js/duration.js"></script> </div> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      陕ICP备2026004197号-1
+    </a>
+  </span>
+  
+    
+      <span>
+        <a
+          href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=61058102000324"
+          rel="nofollow noopener"
+          class="beian-police"
+          target="_blank"
+        >
+          
+            <span style="visibility: hidden; width: 0">|</span>
+            <img src="/img/police_beian.png" srcset="/img/loading.gif" lazyload alt="police-icon"/>
+          
+          <span>陕公网安备61058102000324号</span>
+        </a>
+      </span>
+    
+  
+</div>
+
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="/js/starts.js"></script>
+<script src="/js/typing-effect.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
